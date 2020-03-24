@@ -41,9 +41,23 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
-  #  - images/a_dot_ham.jpeg
+  assets:
+   - assets/images/background/dojo.png
+   - assets/images/background/frame.png
+   - assets/images/belts/white-belt.png
+   - assets/images/belts/yellow-belt.png
+   - assets/images/belts/orange-belt.png
+   - assets/images/belts/green-belt.png
+   - assets/images/belts/blue-belt.png
+   - assets/images/belts/red-belt.png
+   - assets/images/belts/purple-belt.png
+   - assets/images/belts/brown-belt.png
+   - assets/images/belts/black-belt.png
+   - assets/images/branding/logo-beige.png
+   - assets/images/branding/logo-orange.png
+   - assets/images/branding/logo-white.png
+   - assets/images/modals/instructions.png
+   - assets/images/modals/legend.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
