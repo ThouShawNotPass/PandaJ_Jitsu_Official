@@ -1,2 +1,2 @@
-# PandaJ_Jitsu_Official
+# Panda Jitsu
 A card-based, cross-platform game built in Flutter.
