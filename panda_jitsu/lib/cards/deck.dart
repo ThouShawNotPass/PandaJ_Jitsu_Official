@@ -46,14 +46,6 @@ class Deck {
 		cards.add(newCard);
 	}
 
-	// Paints each card in the deck to the center of the screen
-	void render(Canvas c) {
-		if (cards == null) {
-			print('null');
-		} else if (cards.isEmpty) {
-			print('isEmpty');	
-		} else {
-			cards.forEach((Card card) => card.render(c));
-		}
-	}
+	// The cards in the deck are not rendered (off screen)
+	void render(Canvas c) {}
 }

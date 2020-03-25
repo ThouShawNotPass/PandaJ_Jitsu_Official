@@ -19,23 +19,25 @@ void main() async {
 	// load all assets (cached in a static variable in Flame to reuse later)
 	Flame.images.loadAll(<String>[
 		'background/dojo.png',
-    'background/dojo-no-tray.png',
-    'background/frame.png',
-    'background/frame-with-tray.png',
-    'belts/white-belt.png',
-    'belts/yellow-belt.png',
-    'belts/orange-belt.png',
-    'belts/green-belt.png',
-    'belts/blue-belt.png',
-    'belts/red-belt.png',
-    'belts/purple-belt.png',
-    'belts/brown-belt.png',
-    'belts/black-belt.png',
-    'branding/logo-beige.png',
-    'branding/logo-orange.png',
-    'branding/logo-white.png',
-    'modals/instructions.png',
-    'modals/legend.png'
+		'background/dojo-no-tray.png',
+		'background/frame.png',
+		'background/frame-with-tray.png',
+		'background/tray.png',
+		'background/help.png',
+		'belts/white-belt.png',
+		'belts/yellow-belt.png',
+		'belts/orange-belt.png',
+		'belts/green-belt.png',
+		'belts/blue-belt.png',
+		'belts/red-belt.png',
+		'belts/purple-belt.png',
+		'belts/brown-belt.png',
+		'belts/black-belt.png',
+		'branding/logo-beige.png',
+		'branding/logo-orange.png',
+		'branding/logo-white.png',
+		'modals/instructions.png',
+		'modals/legend.png'
 	]);
 
 	// create a new instance of the game object

@@ -1,5 +1,3 @@
-// TODO - Make the card tray scale with size of screen
-
 import 'dart:ui';
 
 import 'package:flame/sprite.dart';
@@ -14,7 +12,7 @@ class Frame {
 	Sprite frameSprite;
 
 	Frame(this.game) {
-		frameSprite = Sprite('background/frame-with-tray.png');
+		frameSprite = Sprite('background/frame.png');
 		frameRect = Rect.fromLTWH(0, 0, game.screenSize.width, game.screenSize.height);
 	}
 
