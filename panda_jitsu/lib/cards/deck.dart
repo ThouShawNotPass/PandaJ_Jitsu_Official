@@ -9,10 +9,16 @@ import 'package:panda_jitsu/jitsu_game.dart';
 
 class Deck {
 	final JitsuGame game; // reference to the game logic
+	Offset screenCenter;
 	List<Card> cards; // private queue-like data structure
 
 	// Constructor - initialize a reference to the game
-	Deck(this.game);
+	Deck(this.game) {
+		screenCenter = Offset(
+			game.screenSize.width / 2, 
+			game.screenSize.height / 2
+		);
+	}
 
 	// Randomizes the order of the deck (shuffling the cards)
 	void shuffle() {		
@@ -40,6 +46,8 @@ class Deck {
 
 	// Paints each card in the deck to the center of the screen
 	void render(Canvas c) {
-		cards.forEach((Card card) => card.render(c));
+		if (cards != null && cards.isNotEmpty) {
+			cards.forEach((Card card) => card.render(c));
+		}
 	}
 }

@@ -14,7 +14,7 @@ import 'package:panda_jitsu/components/frame.dart'; // frame
 // It overrides the basic (empty) Game methods 'render' && 'update'.
 class JitsuGame extends Game {
 	Size screenSize; // the size of the current device's screen
-	double tileSize; // the tile size for current screen resolution (1/9th screen height)
+	double tileSize; // the tile size for current screen resolution (we are currently basing this off of one-ninth of the screen's height)
 	Dojo background;
 	Frame frame;
 	Deck deck;
@@ -24,32 +24,32 @@ class JitsuGame extends Game {
 		initialize(); // constructors cannot be async but this function can be
 	}
 
-	// Initialize the game. Should be called exactly once, using async to wait for screenSize
+	// Initialize the game. Should be called exactly once, using async to wait for screenSize via initialDimensions() method call
 	void initialize() async {
 		resize(await Flame.util.initialDimensions()); // get dimensions of the current screen (returns a Future<Size> object)
-		
+		// Create instances of our objects
 		background = Dojo(this);
 		frame = Frame(this);
 		deck = Deck(this);
-		// card = Card(this);
-		// deck.add(card);
+		deck.add(Card.basic(this, deck));
 	}
 
-	// Calculates the size of the current screen and updates instance variable
+	// Calculates the size of the current screen and updates instance variable. This method is typically only called when the screen size changes, such as when the device is rotated by the user.
 	void resize(Size size) {
 		screenSize = size;
 		tileSize = size.height / 9; // the screen will be 9 'tiles' high
 	}
 
-	// Paints the new canvas
+	// Paints the components to the next canvas
 	void render(Canvas canvas) {
 		background.render(canvas); // draw background
 		frame.render(canvas); // draw the frame
-		// card.render(canvas); // draw a card
+		deck.render(canvas); // draw the deck
 	}
 
+	// update the position of the components before next render
 	void update(double t) {}
 
-	// 
+	// this is called when we are passed a tap event
 	void onTapDown(TapDownDetails d) {}
 }
