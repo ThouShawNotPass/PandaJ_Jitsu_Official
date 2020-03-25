@@ -25,7 +25,9 @@ flutter:
   uses-material-design: true # access to material 'Icons'
   assets:
    - assets/images/background/dojo.png
+   - assets/images/background/dojo-no-tray.png
    - assets/images/background/frame.png
+   - assets/images/background/frame-with-tray.png
    - assets/images/belts/white-belt.png
    - assets/images/belts/yellow-belt.png
    - assets/images/belts/orange-belt.png
