@@ -3,8 +3,9 @@ import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:panda_jitsu/jitsu-game.dart';
+import 'package:panda_jitsu/jitsu_game.dart';
 
+// Name Ideas: Panda Jitsu, Karate Panda
 void main() async {
 	// This is the glue that binds the framework to the Flutter engine.
 	WidgetsFlutterBinding.ensureInitialized();
