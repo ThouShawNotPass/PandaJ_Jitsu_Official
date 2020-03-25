@@ -65,10 +65,14 @@ class Tray {
 				}
 			}
 			// update all the cards in the slots (now they should all be full)
-			slots.forEach((Card card) => card.update(t));
+			slots.forEach((Card card) {
+				print('card');
+				// card.update(t);
+			});
 		}
 		if (pot != null) {
-			pot.update(t);
+			print('pot');
+			// pot.update(t);
 		}
 	}
 

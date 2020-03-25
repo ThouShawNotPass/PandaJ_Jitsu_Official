@@ -71,12 +71,13 @@ class JitsuGame extends Game {
 	void render(Canvas canvas) {
 		background.render(canvas); // draw background
 		frame.render(canvas); // draw the frame
-		tray.render(canvas);
+		// tray.render(canvas);
 	}
 
 	// update the position of the components before next render
 	void update(double t) {
-		tray.update(t);
+		print(tray);
+		// tray.update(t);
 	}
 
 	// this is called when we are passed a tap event
