@@ -17,16 +17,6 @@ class Card {
 	int level; // numbert between 1 and 9 (for now)
     bool isFaceUp; // which side of the card should we show
 
-    // // Basic Constructor - defaults to a level 1 fire card that is face up
-	// Card.basic(this.game, this.deck) {
-	// 	Card(this.game, this.deck, Element.fire, 1, true);
-	// }
-
-	// // Advanced Constructor – defaults to faceUp and whatever is passed in
-	// Card.advanced(this.game, this.deck, Element el, int lvl) {
-	// 	Card(this.game, this.deck, el, lvl, true);
-	// }
-
 	// Main Constructor - main one that builds everything
 	Card(this.game, this.deck, Element el, int lvl, bool faceUp) {
 		targetLocation = Offset(0, 0);

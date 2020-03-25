@@ -53,7 +53,7 @@ class Deck {
 		} else if (cards.isEmpty) {
 			print('isEmpty');	
 		} else {
-			// cards.forEach((Card card) => card.render(c));
+			cards.forEach((Card card) => card.render(c));
 		}
 	}
 }

@@ -1,1 +1,0 @@
-// This class will handle the bottom part of the screen, including where cards should be diverted and keeps track of empty slots as cards are selected.
