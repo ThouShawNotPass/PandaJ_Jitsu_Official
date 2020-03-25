@@ -1,11 +1,14 @@
 import 'dart:ui'; // access to Canvas and Size
 import 'dart:math'; // for random integer generation
+
 import 'package:flame/flame.dart'; // access Flame Util's initialDimensions
 import 'package:flame/game.dart'; // access Flame Game-Loop scaffolding
 import 'package:flutter/gestures.dart';
+
+import 'package:panda_jitsu/cards/card.dart'; // import the card superclass
+import 'package:panda_jitsu/cards/fire_card.dart'; // import fire
 import 'package:panda_jitsu/components/dojo.dart'; // import the background
 import 'package:panda_jitsu/components/frame.dart'; // import the frame
-import 'package:panda_jitsu/components/card.dart'; // import the cards
 
 // This is a JitsuGame class that has gameloop logic in it to control a jitsu game. 
 // It overrides the basic (empty) Game methods 'render' && 'update'.
@@ -27,7 +30,7 @@ class JitsuGame extends Game {
 		
 		background = Dojo(this);
     frame = Frame(this);
-		card = Card(this);
+		card = FireCard(this, 1);
 	}
 
   // Calculates the size of the current screen and updates instance variable

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/sprite.dart';
+
 import 'package:panda_jitsu/jitsu_game.dart';
 
 // This is the dojo background class which defines behavior for the background.
