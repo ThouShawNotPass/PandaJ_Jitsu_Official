@@ -1,4 +1,4 @@
-import 'dart:ui'; // for touch/tap user interface
+import 'dart:ui'; // for basic dart objects (Rect, Paint, Canvas)
 
 import 'package:panda_jitsu/element.dart'; // element enum (fire, water, snow)
 import 'package:panda_jitsu/jitsu_game.dart';

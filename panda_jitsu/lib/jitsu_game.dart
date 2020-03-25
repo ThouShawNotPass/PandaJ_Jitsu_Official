@@ -5,19 +5,19 @@ import 'package:flame/flame.dart'; // access Flame Util's initialDimensions
 import 'package:flame/game.dart'; // access Flame Game-Loop scaffolding
 import 'package:flutter/gestures.dart';
 
-import 'package:panda_jitsu/cards/card.dart'; // import the card superclass
-import 'package:panda_jitsu/cards/fire_card.dart'; // import fire
-import 'package:panda_jitsu/components/dojo.dart'; // import the background
-import 'package:panda_jitsu/components/frame.dart'; // import the frame
+import 'package:panda_jitsu/cards/card.dart'; // individual card
+import 'package:panda_jitsu/cards/deck.dart'; // the deck object
+import 'package:panda_jitsu/components/dojo.dart'; // background
+import 'package:panda_jitsu/components/frame.dart'; // frame
 
-// This is a JitsuGame class that has gameloop logic in it to control a jitsu game. 
+// This is a JitsuGame class that has gameloop logic to control a jitsu game. 
 // It overrides the basic (empty) Game methods 'render' && 'update'.
 class JitsuGame extends Game {
 	Size screenSize; // the size of the current device's screen
 	double tileSize; // the tile size for current screen resolution (1/9th screen height)
 	Dojo background;
 	Frame frame;
-	Card card;
+	Deck deck;
 	Random rand; // generates new random integers
 
 	JitsuGame() {
@@ -30,6 +30,9 @@ class JitsuGame extends Game {
 		
 		background = Dojo(this);
 		frame = Frame(this);
+		deck = Deck(this);
+		// card = Card(this);
+		// deck.add(card);
 	}
 
 	// Calculates the size of the current screen and updates instance variable
@@ -42,7 +45,7 @@ class JitsuGame extends Game {
 	void render(Canvas canvas) {
 		background.render(canvas); // draw background
 		frame.render(canvas); // draw the frame
-		card.render(canvas); // draw a card
+		// card.render(canvas); // draw a card
 	}
 
 	void update(double t) {}

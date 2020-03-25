@@ -1,3 +1,5 @@
+import 'dart:ui'; // for basic dart objects (Rect, Paint, Canvas)
+
 import 'package:panda_jitsu/cards/card.dart';
 import 'package:panda_jitsu/jitsu_game.dart';
 
@@ -34,5 +36,10 @@ class Deck {
 	// Adds the given card to the bottom of the deck structure.
 	void add(Card newCard) {
 		cards.add(newCard);
+	}
+
+	// Paints each card in the deck to the center of the screen
+	void render(Canvas c) {
+		cards.forEach((Card card) => card.render(c));
 	}
 }
