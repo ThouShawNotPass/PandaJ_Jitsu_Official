@@ -15,6 +15,7 @@ class Tray {
 	final int size;
 	final JitsuGame game;
 
+	Card pot; // the card in the middle
 	List<Card> slots;
 	Offset trayPos; // top left of the tray
   	Rect trayArea; // rectangular area of the tray
@@ -40,6 +41,11 @@ class Tray {
 		if (slots != null && slots.isNotEmpty) {
 			slots.forEach((Card card) => card.render(c)); // draw each card 
 		}
+
+		// step 3 - render the card in the pot
+		if (pot != null) {
+			pot.render(c);
+		}
 	}
 
 	// Loops through the five slots and makes sure they are all full. If not, it will draw the next card from the deck to fill the open slot.
@@ -51,7 +57,7 @@ class Tray {
 					Card nextCard =	deck.draw(); // if not, draw a new card
 					Offset openSlot = Offset(
 						30 + trayPos.dx + game.tileSize * 1.75 * i, 
-						25 + trayPos.dy
+						25 + trayPos.dy + 15
 					);
 					nextCard.setTargetLocation(openSlot); // update target
 					nextCard.status = CardStatus.inHand;
@@ -61,15 +67,21 @@ class Tray {
 			// update all the cards in the slots (now they should all be full)
 			slots.forEach((Card card) => card.update(t));
 		}
+		if (pot != null) {
+			pot.update(t);
+		}
 	}
 
 	void handleTouchAt(Offset pt) {
-		if (slots != null && slots.isNotEmpty) {
-			slots.forEach((Card card) {
-				if (card.isUsers && card.containsPoint(pt)) {
-					card.onTap();
-				}
-			});
+		if (pot == null) {
+			if (slots != null && slots.isNotEmpty) {
+				slots.forEach((Card card) {
+					if (card.containsPoint(pt)) {
+						pot = card;
+						card.onTap();
+					}
+				});
+			}
 		}
 	}
 }

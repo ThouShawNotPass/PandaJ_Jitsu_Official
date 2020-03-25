@@ -27,15 +27,16 @@ class Card {
 
 	// Main Constructor - main one that builds everything
 	Card(this.game, this.deck, Element el, int lvl, bool faceUp) {
-		targetLocation = Offset(
-			(game.screenSize.width / 2) - (game.tileSize * 0.75), // center (x)
-			(game.screenSize.height) // bottom of the screen (y)
+		// centered horizontally and vertically offscreen below the screen
+		targetLocation = Offset( 
+			(game.screenSize.width / 2) - (game.tileSize * 0.75),
+			(game.screenSize.height)
 		);
 		shape = Rect.fromLTWH(
 			targetLocation.dx, 
 			targetLocation.dy, 
-			game.tileSize * 1.5, 
-			game.tileSize * 2
+			deck.cardSize.width, 
+			deck.cardSize.height
 		);
 		style = Paint();
 		type = el;
@@ -47,27 +48,31 @@ class Card {
 	}
 
 	// makes the card bigger by a factor of n, while preserving the left and top positioning of the card.
-	void inflate(int n) {
+	void inflate(double n) {
 		shape = Rect.fromLTWH(
 			shape.left, 
 			shape.right, 
-			game.tileSize * 1.5 * n, 
-			game.tileSize * 2 * n
+			deck.cardSize.width * n, 
+			deck.cardSize.height * n
 		);
 	}
 
 	// Determines the color of the card based on the element type
 	void setColorFromElement(Element type) {
-		switch (type) {
-			case Element.fire:
-				style.color = Color(0xFFBF3030);
-				break;
-			case Element.water:
-				style.color = Color(0xFF3048BF);
-				break;
-			default: // case Element.snow (or type is null)
-				style.color = Color(0xFFFFFFFF);
-				break;
+		if (isFaceUp) {
+			switch (type) {
+				case Element.fire:
+					style.color = Color(0xFFBF3030);
+					break;
+				case Element.water:
+					style.color = Color(0xFF3048BF);
+					break;
+				default: // case Element.snow (or type is null)
+					style.color = Color(0xFFFFFFFF);
+					break;
+			}
+		} else {
+			style.color = Color(0xFF000000);
 		}
 	}
 
@@ -83,7 +88,7 @@ class Card {
 
 	// Draws the current shape to the given canvas
 	void render(Canvas c) {
-		c.drawRect(shape, style);	
+		c.drawRect(shape, style);
 	}
 
 	void update(double t) {
@@ -101,11 +106,15 @@ class Card {
 
 	// Called when the card has been selected
 	void onTap() {
-		if (status == CardStatus.inHand) {
-			inflate(2);
-			Offset pot = Offset(0, 0);
-			setTargetLocation(pot);
+		if (status == CardStatus.inHand) { // only your cards are tappable
 			status = CardStatus.inPot;
+			double n = 1.5; // inflation factor n
+			inflate(n);
+			Offset thePot = Offset(
+				(game.screenSize.width / 2) - (game.tileSize * 2 * n),
+				(game.screenSize.height / 2) - (game.tileSize * 1 * n)
+			);
+			setTargetLocation(thePot);
 		}
 	}
 }

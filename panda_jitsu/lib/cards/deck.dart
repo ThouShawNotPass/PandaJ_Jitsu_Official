@@ -13,6 +13,7 @@ class Deck {
 
 	List<Card> cards; // private queue-like data structure
 	Offset screenCenter;
+	Size cardSize;
 
 	// Constructor - initialize a reference to the game
 	Deck(this.game) {
@@ -21,6 +22,7 @@ class Deck {
 			game.screenSize.width / 2, 
 			game.screenSize.height / 2
 		);
+		cardSize = Size(game.tileSize * 1.5, game.tileSize * 1.75);
 	}
 
 	// Randomizes the order of the deck (shuffling the cards)
