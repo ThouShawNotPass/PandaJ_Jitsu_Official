@@ -9,6 +9,7 @@ import 'package:panda_jitsu/cards/card.dart'; // individual card
 import 'package:panda_jitsu/cards/deck.dart'; // the deck object
 import 'package:panda_jitsu/components/dojo.dart'; // background
 import 'package:panda_jitsu/components/frame.dart'; // frame
+import 'package:panda_jitsu/element.dart'; // the element
 
 // This is a JitsuGame class that has gameloop logic to control a jitsu game. 
 // It overrides the basic (empty) Game methods 'render' && 'update'.
@@ -31,10 +32,9 @@ class JitsuGame extends Game {
 		
 		// Create instances of our objects
 		deck = Deck(this);
-		deck.add(Card.basic(this, deck));
+		deck.add(Card(this, deck, Element.fire, 1, true));
 		background = Dojo(this);
 		frame = Frame(this);
-		
 	}
 
 	// Calculates the size of the current screen and updates instance variable. This method is typically only called when the screen size changes, such as when the device is rotated by the user.
