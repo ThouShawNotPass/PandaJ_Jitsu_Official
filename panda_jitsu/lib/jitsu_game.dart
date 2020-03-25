@@ -13,6 +13,7 @@ import 'package:panda_jitsu/components/frame.dart'; // frame
 // This is a JitsuGame class that has gameloop logic to control a jitsu game. 
 // It overrides the basic (empty) Game methods 'render' && 'update'.
 class JitsuGame extends Game {
+
 	Size screenSize; // the size of the current device's screen
 	double tileSize; // the tile size for current screen resolution (we are currently basing this off of one-ninth of the screen's height)
 	Dojo background;
@@ -27,11 +28,13 @@ class JitsuGame extends Game {
 	// Initialize the game. Should be called exactly once, using async to wait for screenSize via initialDimensions() method call
 	void initialize() async {
 		resize(await Flame.util.initialDimensions()); // get dimensions of the current screen (returns a Future<Size> object)
+		
 		// Create instances of our objects
-		background = Dojo(this);
-		frame = Frame(this);
 		deck = Deck(this);
 		deck.add(Card.basic(this, deck));
+		background = Dojo(this);
+		frame = Frame(this);
+		
 	}
 
 	// Calculates the size of the current screen and updates instance variable. This method is typically only called when the screen size changes, such as when the device is rotated by the user.

@@ -8,12 +8,14 @@ import 'package:panda_jitsu/jitsu_game.dart';
 // ? Can this be implemented as a Queue<Card> rather than List<Card>?
 
 class Deck {
+
 	final JitsuGame game; // reference to the game logic
 	Offset screenCenter;
 	List<Card> cards; // private queue-like data structure
 
 	// Constructor - initialize a reference to the game
 	Deck(this.game) {
+		cards = List<Card>();
 		screenCenter = Offset(
 			game.screenSize.width / 2, 
 			game.screenSize.height / 2
@@ -48,6 +50,6 @@ class Deck {
 	void render(Canvas c) {
 		if (cards != null && cards.isNotEmpty) {
 			cards.forEach((Card card) => card.render(c));
-		}
+		} 
 	}
 }
