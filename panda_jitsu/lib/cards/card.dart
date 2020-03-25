@@ -28,47 +28,36 @@ class Card {
 	// Main Constructor - main one that builds everything
 	Card(this.game, this.deck, Element el, int lvl, bool faceUp) {
 		targetLocation = Offset(
-			(game.screenSize.width / 2) - (game.tileSize * 0.75), 
-			(game.screenSize.height)
+			(game.screenSize.width / 2) - (game.tileSize * 0.75), // center (x)
+			(game.screenSize.height) // bottom of the screen (y)
 		);
-		shape = _setShape();
+		shape = Rect.fromLTWH(
+			targetLocation.dx, 
+			targetLocation.dy, 
+			game.tileSize * 1.5, 
+			game.tileSize * 2
+		);
 		style = Paint();
 		type = el;
-		_setColor();
+		setColorFromElement(el);
 		level = lvl;
         isFaceUp = faceUp;
 		isUsers = faceUp;
 		status = CardStatus.inDeck;
 	}
 
-	// makes the card bigger by a factor of n
+	// makes the card bigger by a factor of n, while preserving the left and top positioning of the card.
 	void inflate(int n) {
 		shape = Rect.fromLTWH(
-			targetLocation.dx, 
-			targetLocation.dy, 
+			shape.left, 
+			shape.right, 
 			game.tileSize * 1.5 * n, 
 			game.tileSize * 2 * n
 		);
 	}
 
-	// Sets the shape of the card
-	Rect _setShape() {
-		return Rect.fromLTWH(
-			targetLocation.dx, 
-			targetLocation.dy, 
-			game.tileSize * 1.5, 
-			game.tileSize * 2
-		);
-	}
-
-	// Shifts the card based on the given offset
-	void shift(Offset point) {
-		targetLocation = point;
-		shape = _setShape();
-	}
-
 	// Determines the color of the card based on the element type
-	void _setColor() {
+	void setColorFromElement(Element type) {
 		switch (type) {
 			case Element.fire:
 				style.color = Color(0xFFBF3030);
@@ -76,10 +65,7 @@ class Card {
 			case Element.water:
 				style.color = Color(0xFF3048BF);
 				break;
-			case Element.water: // case Element.snow (or type is null)
-				style.color = Color(0xFFFFFFFF);
-				break;
-			default:
+			default: // case Element.snow (or type is null)
 				style.color = Color(0xFFFFFFFF);
 				break;
 		}
@@ -90,20 +76,26 @@ class Card {
 		return shape.contains(pt);
 	}
 
+	// Sets the target location of the current card
+	void setTargetLocation(Offset pt) {
+		targetLocation = pt;
+	}
+
 	// Draws the current shape to the given canvas
 	void render(Canvas c) {
 		c.drawRect(shape, style);	
 	}
 
 	void update(double t) {
-		double step = game.tileSize * speed * t; // dist card moves next frame
 		Offset toTarget = targetLocation - Offset(shape.left, shape.top);
-
-		if (step < toTarget.distance) { // more than one step to go
-			Offset babyStep = Offset.fromDirection(toTarget.direction, step);
-			shape = shape.shift(babyStep);
-		} else { // less than a step to go
-			shape = shape.shift(toTarget); // we are there!
+		if (toTarget.distance > 0) {
+			double step = game.tileSize * speed * t; // dist card moves next frame
+			if (step < toTarget.distance) { // more than one step to go
+				Offset smStep = Offset.fromDirection(toTarget.direction, step);
+				shape = shape.shift(smStep);
+			} else { // less than a step to go
+				shape = shape.shift(toTarget); // we are there!
+			}
 		}
 	}
 
@@ -111,7 +103,9 @@ class Card {
 	void onTap() {
 		if (status == CardStatus.inHand) {
 			inflate(2);
-			
+			Offset pot = Offset(0, 0);
+			setTargetLocation(pot);
+			status = CardStatus.inPot;
 		}
 	}
 }

@@ -10,8 +10,9 @@ import 'package:panda_jitsu/jitsu_game.dart';
 class Deck {
 
 	final JitsuGame game; // reference to the game logic
-	Offset screenCenter;
+
 	List<Card> cards; // private queue-like data structure
+	Offset screenCenter;
 
 	// Constructor - initialize a reference to the game
 	Deck(this.game) {
@@ -33,7 +34,7 @@ class Deck {
 	}
 
 	// Removes and returns the first Card in the deck. This method will return null if the deck is empty.
-	Card remove() {
+	Card draw() {
 		Card result;
 		if (cards.isNotEmpty) {
 			result = cards.removeAt(0);
@@ -48,4 +49,7 @@ class Deck {
 
 	// The cards in the deck are not rendered (off screen)
 	void render(Canvas c) {}
+
+	// The cards in the deck are not updated (off screen)
+	void update(Canvas c) {}
 }

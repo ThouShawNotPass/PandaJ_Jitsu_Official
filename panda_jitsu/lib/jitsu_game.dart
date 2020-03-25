@@ -43,17 +43,22 @@ class JitsuGame extends Game {
 		myDeck.add(Card(this, myDeck, Element.snow, 1, true)); // add to deck
 		myDeck.add(Card(this, myDeck, Element.fire, 1, true)); // add to deck
 		myDeck.add(Card(this, myDeck, Element.water, 1, true)); // add to deck
+		myDeck.add(Card(this, myDeck, Element.water, 1, true)); // add to deck
+		myDeck.add(Card(this, myDeck, Element.water, 1, true)); // add to deck
+		myDeck.add(Card(this, myDeck, Element.water, 1, true)); // add to deck
+		myDeck.add(Card(this, myDeck, Element.water, 1, true)); // add to deck
+		myDeck.add(Card(this, myDeck, Element.water, 1, true)); // add to deck
 		myDeck.shuffle(); // shuffle the deck
 
 		theirDeck = Deck(this); // deck
-		theirDeck.add(Card(this, theirDeck, Element.fire, 1, true)); 
-		theirDeck.add(Card(this, theirDeck, Element.water, 1, true)); 
-		theirDeck.add(Card(this, theirDeck, Element.snow, 1, true)); 
-		theirDeck.add(Card(this, theirDeck, Element.fire, 1, true)); 
-		theirDeck.add(Card(this, theirDeck, Element.water, 1, true)); 
+		theirDeck.add(Card(this, theirDeck, Element.fire, 1, false)); 
+		theirDeck.add(Card(this, theirDeck, Element.water, 1, false)); 
+		theirDeck.add(Card(this, theirDeck, Element.snow, 1, false)); 
+		theirDeck.add(Card(this, theirDeck, Element.fire, 1, false)); 
+		theirDeck.add(Card(this, theirDeck, Element.water, 1, false)); 
 		theirDeck.shuffle(); // shuffle the deck
 
-		tray = Tray(this, myDeck); // create tray
+		tray = Tray(this, myDeck, 5); // create tray
 	}
 
 	// Calculates the size of the current screen and updates instance variable. This method is typically only called when the screen size changes, such as when the device is rotated by the user.
@@ -67,8 +72,6 @@ class JitsuGame extends Game {
 		background.render(canvas); // draw background
 		frame.render(canvas); // draw the frame
 		tray.render(canvas);
-		myDeck.render(canvas); // draw the decks
-		theirDeck.render(canvas); // draw the decks
 	}
 
 	// update the position of the components before next render

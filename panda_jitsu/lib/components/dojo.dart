@@ -8,6 +8,7 @@ import 'package:panda_jitsu/jitsu_game.dart';
 // Note: Most mobile devices have a screen width of 9:12-18.5 so our bg is 9:23.
 class Dojo {
 	final JitsuGame game;
+
   	Rect bgRect;
 	Sprite bgSprite;
 
@@ -22,9 +23,11 @@ class Dojo {
 		);
 	}
 
+	// Draws the background to the screen
 	void render(Canvas c) {
 		bgSprite.renderRect(c, bgRect);
 	}
 
+	// No need to update the background
 	void update(double t) {}
 }

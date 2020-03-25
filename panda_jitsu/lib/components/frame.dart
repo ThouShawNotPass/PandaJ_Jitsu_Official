@@ -8,7 +8,8 @@ import 'package:panda_jitsu/jitsu_game.dart';
 // Note: Most mobile devices have a screen width of 9:12-18.5 so our bg is 9:23.
 class Frame {
 	final JitsuGame game;
-  Rect frameRect;
+  	
+	Rect frameRect;
 	Sprite frameSprite;
 
 	Frame(this.game) {
@@ -16,9 +17,11 @@ class Frame {
 		frameRect = Rect.fromLTWH(0, 0, game.screenSize.width, game.screenSize.height);
 	}
 
+	// Draws the frame to the screen
 	void render(Canvas c) {
 		frameSprite.renderRect(c, frameRect);
 	}
 
+	// No need to update the frame
 	void update(double t) {}
 }
