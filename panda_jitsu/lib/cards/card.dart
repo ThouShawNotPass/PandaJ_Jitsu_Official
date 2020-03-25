@@ -11,13 +11,14 @@ class Card {
 	double screenCenterY;
 	Rect shape; // the rectangular shape of the card (3:4 ratio)
 	Paint style; // color (for now)
+	Offset targetLocation; // where the card is trying to go
 
 	Element type; // fire, water, snow
 	int level; // numbert between 1 and 9 (for now)
     bool isFaceUp;
 
     // Default constructor for a card object
-	Card(this.game, int lvl) {
+	Card(this.game) {
 		screenCenterX = game.screenSize.width / 2;
 		screenCenterY = game.screenSize.height / 2;
 		shape = Rect.fromLTWH(
@@ -29,7 +30,7 @@ class Card {
 		style = Paint();
 		style.color = Color(0xffBF3030); // red card
 		type = Element.fire; // fire card
-		level = lvl;
+		level = 1;
         isFaceUp = true;
 	}
 
@@ -37,7 +38,7 @@ class Card {
 		c.drawRect(shape, style);	
 	}
 
-	void shiftShape(Offset point) {
+	void shift(Offset point) {
 		shape = shape.shift(point);
 		switch (type) {
 			case Element.fire:
