@@ -55,6 +55,12 @@ class Tray {
 		card.onTap();
 	}
 
+	// Returns whether both player's cards are in the middle 'pot'
+	bool isReadyForReveal() {
+		return 	myPot != null && myPot.isDoneMoving() &&	
+				comPot != null && comPot.isDoneMoving();
+	}
+
 	// Renders the players names based on which side their deck is on
 	void renderNames(Deck myDeck, Canvas c) {
 		Position left = Position(trayPos.dx + 25, trayPos.dy + 15);
@@ -83,14 +89,14 @@ class Tray {
 	}
 
 	// Finds and returns the coordinate of the deck at the given position.
-	Offset getSlotFromIndex(int i, Deck deck) {
+	Position getSlotFromIndex(int i, Deck deck) {
 		double fromLeftEdge = 30 + trayPos.dx + (paddingFactor * deck.cardSize.width * i);
 		double fromTopEdge = 25 + trayPos.dy + 15;
 		if (deck.alignLeft) {
-			return Offset(fromLeftEdge, fromTopEdge);
+			return Position(fromLeftEdge, fromTopEdge);
 		} else {
 			fromLeftEdge += deck.cardSize.width;
-			return Offset(game.screenSize.width - fromLeftEdge, fromTopEdge);
+			return Position(game.screenSize.width - fromLeftEdge, fromTopEdge);
 		}
 	}
 
@@ -101,7 +107,7 @@ class Tray {
 				// check all mySlots are filled
 				if (slot.elementAt(i) == null || slot.elementAt(i).status != CardStatus.inHand) { 
 					Card nextCard =	deck.draw(); // if not, draw a new card
-					Offset openSlot = getSlotFromIndex(i, deck);
+					Position openSlot = getSlotFromIndex(i, deck);
 					nextCard.setTargetLocation(openSlot); // update target
 					nextCard.status = CardStatus.inHand;
 					slot[i] = nextCard; // fill the slot with reference to card
@@ -120,9 +126,12 @@ class Tray {
 	// Renders the tray (and its components) to the canvas
 	void render(Canvas c) {
 		traySprite.renderRect(c, trayArea); // render tray background
-		renderNames(myDeck, c);
 		renderCards(comSlots, comPot, c); // render opponents cards
 		renderCards(mySlots, myPot, c); // render my cards
+		renderNames(myDeck, c);
+		if (isReadyForReveal()) {
+			comPot.flip();
+		}
 	}
 
 	// Loops through the five mySlots and makes sure they are all full. If not, it will draw the next card from the deck to fill the open slot.

@@ -1,5 +1,6 @@
 import 'dart:ui'; // for basic dart objects (Rect, Paint, Canvas)
 
+import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/gestures.dart'; // handles taps
 
@@ -18,7 +19,8 @@ class Card {
 
 	Rect shape; // the rectangular shape of the card (3:4 ratio)
 	Sprite style; // image and styling of the card
-	Offset targetLocation; // where the card is trying to go
+	Position targetLocation; // where the card is trying to go
+	Size targetSize; // the shape the card is trying to be in
 
 	Element type; // fire, water, snow
 	int level; // numbert between 1 and 9 (for now)
@@ -28,15 +30,19 @@ class Card {
 	// Main Constructor - main one that builds everything
 	Card(this.game, this.deck, Element el, int lvl, bool faceUp) {
 		// centered horizontally and vertically offscreen below the screen
-		targetLocation = Offset( 
+		targetLocation = Position( 
 			(deck.screenCenter.x) - (deck.cardSize.width / 2),
 			(deck.screenCenter.y * 2)
 		);
-		shape = Rect.fromLTWH(
-			targetLocation.dx, 
-			targetLocation.dy, 
+		targetSize = Size(
 			deck.cardSize.width, 
 			deck.cardSize.height
+		);
+		shape = Rect.fromLTWH(
+			targetLocation.x, 
+			targetLocation.y, 
+			targetSize.width, 
+			targetSize.height
 		);
 		isFaceUp = faceUp; // this must come before setColorFromElement()
 		type = el;
@@ -69,13 +75,18 @@ class Card {
 		return Rect.fromLTWH(shape.left, shape.top, n * shape.width, n * shape.height);
 	}
 
-	// Whether the card shape contains the given point
+	// Returns whether the card shape contains the given point
 	bool containsPoint(Offset pt) {
 		return shape.contains(pt);
 	}
 
+	// Returns whether the card is done translating
+	bool isDoneMoving() {
+		return targetLocation.equals(Position(shape.left, shape.right));
+	}
+
 	// Sets the target location of the current card
-	void setTargetLocation(Offset pt) {
+	void setTargetLocation(Position pt) {
 		targetLocation = pt;
 	}
 
@@ -84,11 +95,17 @@ class Card {
 		style.renderRect(c, shape);
 	}
 
+	// Animates a card-flip action
+	void flip() {
+		targetSize = Size(0, deck.cardSize.height);
+	}
+
 	// Tries to take a small step toward the targetLocation if it needs to
 	void update(double t) {
-		Offset toTarget = targetLocation - Offset(shape.left, shape.top);
+		// update the position of the card
+		Offset toTarget = Offset(targetLocation.x, targetLocation.y) - Offset(shape.left, shape.top);
 		if (toTarget.distance > 0) {
-			double step = game.tileSize * speed * t; // dist card moves next frame
+			double step = game.tileSize * speed * t; // dist card moves
 			if (step < toTarget.distance) { // more than one step to go
 				Offset smStep = Offset.fromDirection(toTarget.direction, step);
 				shape = shape.shift(smStep);
@@ -96,6 +113,17 @@ class Card {
 				shape = shape.shift(toTarget); // we are there!
 			}
 		}
+
+		// update the shape of the card
+		// shape = Rect.fromLTWH(
+		// 	shape.left,
+		// 	shape.top,
+		// 	targetSize.width, 
+		// 	targetSize.height
+		// );
+
+		// update the style of the card
+		setSpriteFromElement(type);
 	}
 
 	// This method is only called when the card has been selected
@@ -108,12 +136,12 @@ class Card {
 				n = 1.5; // for regular sized cars
 			}
 			shape = inflateByFactor(n);
-			Offset thePot = Offset( // default left target
+			Position thePot = Position( // default left target
 				(deck.screenCenter.x) - (2 * shape.width),
 				(deck.screenCenter.y) - (shape.height / 2)
 			);
 			if (!deck.alignLeft) { // set right target instead
-				thePot = thePot.translate(3 * shape.width, 0);
+				thePot = thePot.add(Position(3 * shape.width, 0));
 			}
 			setTargetLocation(thePot);
 			status = CardStatus.inPot;
