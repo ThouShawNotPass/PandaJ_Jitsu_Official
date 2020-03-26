@@ -11,11 +11,12 @@ import 'package:panda_jitsu/jitsu_game.dart';
 
 class Deck {
 
-	static const alignLeft = true; // which side the player should go on
+	static const playerOnLeft = true; // which side the player should go on
 
 	final JitsuGame game; // reference to the game logic
 
-	bool isPrimary; // true if player owns the deck, false if opponent
+	bool alignLeft; // true if deck is on the left side
+	bool isSmall; // true if opponent's card, false if yours
 	List<Card> cards; // private queue-like data structure
 	Position screenCenter;
 	Size cardSize;
@@ -29,7 +30,8 @@ class Deck {
 		);
 		double width = game.tileSize * 1.4;
 		cardSize = Size(width, width * 1.2);
-		isPrimary = alignLeft;
+		alignLeft = playerOnLeft;
+		isSmall = false;
 	}
 
 	// Constructor - initialize a reference to the game
@@ -41,7 +43,8 @@ class Deck {
 		);
 		double width = game.tileSize * 0.70;
 		cardSize = Size(width, width * 1.2);
-		isPrimary = !alignLeft;
+		alignLeft = !playerOnLeft;
+		isSmall = true;
 	}
 
 	// Randomizes the order of the deck (shuffling the cards)

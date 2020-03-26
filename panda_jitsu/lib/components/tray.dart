@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/position.dart';
@@ -49,8 +50,7 @@ class Tray {
 
 	// Picks a random card from the opponents hand and puts it in the pot
 	void pickRandomComCard() {
-		comSlots.shuffle();
-		Card card = comSlots.elementAt(0);
+		Card card = comSlots.elementAt(Random().nextInt(comSize));
 		comPot = card;
 		card.onTap();
 	}
@@ -60,14 +60,14 @@ class Tray {
 		Position left = Position(trayPos.dx + 25, trayPos.dy + 15);
 		Position right = Position(game.screenSize.width - trayPos.dx - 25, trayPos.dy + 15);
 		
-		if (myDeck.isPrimary) {
+		if (myDeck.alignLeft) {
 			right.x -= 11 * comName.length;
 			config.render(c, myName, left);
 			config.render(c, comName, right);
 		} else {
 			right.x -= 11 * myName.length;
-			config.render(c, myName, right);
 			config.render(c, comName, left);
+			config.render(c, myName, right);
 		}
 		
 	}
@@ -86,7 +86,7 @@ class Tray {
 	Offset getSlotFromIndex(int i, Deck deck) {
 		double fromLeftEdge = 30 + trayPos.dx + (paddingFactor * deck.cardSize.width * i);
 		double fromTopEdge = 25 + trayPos.dy + 15;
-		if (deck.isPrimary) {
+		if (deck.alignLeft) {
 			return Offset(fromLeftEdge, fromTopEdge);
 		} else {
 			fromLeftEdge += deck.cardSize.width;

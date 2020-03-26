@@ -51,6 +51,10 @@ flutter:
    - assets/images/branding/logo-white.png
    - assets/images/modals/instructions.png
    - assets/images/modals/legend.png
+   - assets/images/cards/back-side.png
+   - assets/images/cards/fire-card.png
+   - assets/images/cards/snow-card.png
+   - assets/images/cards/water-card.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
