@@ -48,11 +48,11 @@ class Card {
 		type = el;
 		level = lvl;
 		status = CardStatus.inDeck;
-		setSpriteFromElement(el);
+		_setSpriteFromElement(el);
 	}
 
 	// Determines the color of the card based on the element type. This method relys on the isFaceUp boolean instance variable being defined (not null)
-	void setSpriteFromElement(Element type) {
+	void _setSpriteFromElement(Element type) {
 		if (isFaceUp) {
 			switch (type) {
 				case Element.fire:
@@ -100,9 +100,8 @@ class Card {
 		targetSize = Size(0, deck.cardSize.height);
 	}
 
-	// Tries to take a small step toward the targetLocation if it needs to
-	void update(double t) {
-		// update the position of the card
+	// Updates the position of the card by shifting the top, left coordinate by a small step if the translation is large or shifting it directly to the target point if the translation is small
+	void _updatePosition(double t) {
 		Offset toTarget = Offset(targetLocation.x, targetLocation.y) - Offset(shape.left, shape.top);
 		if (toTarget.distance > 0) {
 			double step = game.tileSize * speed * t; // dist card moves
@@ -113,17 +112,23 @@ class Card {
 				shape = shape.shift(toTarget); // we are there!
 			}
 		}
+	}
 
-		// update the shape of the card
-		// shape = Rect.fromLTWH(
-		// 	shape.left,
-		// 	shape.top,
-		// 	targetSize.width, 
-		// 	targetSize.height
-		// );
+	// Updates the shape of the card while preserving center allignment. This method will preserve the center position of the card while updating.
+	void _updateSize(double t) {
+
+	}
+
+	// Tries to take a small step toward the targetLocation if it needs to
+	void update(double t) {
+		// update the position of the card
+		_updatePosition(t);
+		
+		// updates the shape of the card
+		_updateSize(t);
 
 		// update the style of the card
-		setSpriteFromElement(type);
+		_setSpriteFromElement(type);
 	}
 
 	// This method is only called when the card has been selected
