@@ -10,7 +10,7 @@ import 'package:panda_jitsu/jitsu_game.dart';
 // The card class is a super class to child element cards and will be a parent to the individual power cards (level ten and up). Each card object can keep track of its own element type (fire, water, snow), its level (currently only one through nine) and whether or not the card should be displayed as "face-up".
 class Card {
 
-	static const int speed = 12;
+	static const int speed = 10;
 
 	final JitsuGame game;
 	final Deck deck;
@@ -22,15 +22,14 @@ class Card {
 	Element type; // fire, water, snow
 	int level; // numbert between 1 and 9 (for now)
     bool isFaceUp; // which side of the card should we show
-    bool isUsers; // if the card is owned by the user or their opponent
     CardStatus status; // which side of the card should we show
 
 	// Main Constructor - main one that builds everything
 	Card(this.game, this.deck, Element el, int lvl, bool faceUp) {
 		// centered horizontally and vertically offscreen below the screen
 		targetLocation = Offset( 
-			(game.screenSize.width / 2) - (game.tileSize * 0.75),
-			(game.screenSize.height)
+			(deck.screenCenter.x) - (deck.cardSize.width / 2),
+			(deck.screenCenter.y * 2)
 		);
 		shape = Rect.fromLTWH(
 			targetLocation.dx, 
@@ -38,12 +37,11 @@ class Card {
 			deck.cardSize.width, 
 			deck.cardSize.height
 		);
+		isFaceUp = faceUp; // this must come before setColorFromElement()
 		style = Paint();
 		type = el;
 		setColorFromElement(el);
 		level = lvl;
-        isFaceUp = faceUp;
-		isUsers = faceUp;
 		status = CardStatus.inDeck;
 	}
 
@@ -57,7 +55,7 @@ class Card {
 		);
 	}
 
-	// Determines the color of the card based on the element type
+	// Determines the color of the card based on the element type. This method relys on the isFaceUp boolean instance variable being defined (not null)
 	void setColorFromElement(Element type) {
 		if (isFaceUp) {
 			switch (type) {
@@ -91,6 +89,7 @@ class Card {
 		c.drawRect(shape, style);
 	}
 
+	// Tries to take a small step toward the targetLocation if it needs to
 	void update(double t) {
 		Offset toTarget = targetLocation - Offset(shape.left, shape.top);
 		if (toTarget.distance > 0) {
@@ -104,16 +103,26 @@ class Card {
 		}
 	}
 
-	// Called when the card has been selected
+	// This method is only called when the card has been selected
 	void onTap() {
-		if (status == CardStatus.inHand) { // only your cards are tappable
-			status = CardStatus.inPot;
-			double n = 1.5; // inflation factor n
+		if (status == CardStatus.inHand) { // only cards in hand are tappable
+			status = CardStatus.inPot; // tapping a card in your hand puts it in the pot (prepare to animate that transition)
+			double n; // inflation factor
+			if (deck.cardSize.width < game.tileSize) {
+				n = 3; // for the tiny opponent's cards => make same size
+			} else {
+				n = 1.5; // for regular sized cars
+			}
 			inflate(n);
-			Offset thePot = Offset(
-				(game.screenSize.width / 2) - (game.tileSize * 2 * n),
-				(game.screenSize.height / 2) - (game.tileSize * 1 * n)
+			// set the target location for the card (toThePot!)
+			double padding = 20.0;
+			Offset thePot = Offset( // default left target
+				(deck.screenCenter.x) - (shape.width + padding),
+				(deck.screenCenter.y) - (shape.height / 2)
 			);
+			if (!deck.isPrimary) { // set right target instead
+				thePot.translate(shape.width + padding , 0);
+			}
 			setTargetLocation(thePot);
 		}
 	}

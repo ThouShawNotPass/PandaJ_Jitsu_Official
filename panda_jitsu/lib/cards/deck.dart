@@ -1,5 +1,7 @@
 import 'dart:ui'; // for basic dart objects (Rect, Paint, Canvas)
 
+import 'package:flame/position.dart';
+
 import 'package:panda_jitsu/cards/card.dart';
 import 'package:panda_jitsu/jitsu_game.dart';
 
@@ -9,20 +11,37 @@ import 'package:panda_jitsu/jitsu_game.dart';
 
 class Deck {
 
+	static const alignLeft = true; // which side the player should go on
+
 	final JitsuGame game; // reference to the game logic
 
+	bool isPrimary; // true if player owns the deck, false if opponent
 	List<Card> cards; // private queue-like data structure
-	Offset screenCenter;
+	Position screenCenter;
 	Size cardSize;
 
 	// Constructor - initialize a reference to the game
 	Deck(this.game) {
 		cards = List<Card>();
-		screenCenter = Offset(
+		screenCenter = Position(
 			game.screenSize.width / 2, 
 			game.screenSize.height / 2
 		);
-		cardSize = Size(game.tileSize * 1.5, game.tileSize * 1.75);
+		double width = game.tileSize * 1.4;
+		cardSize = Size(width, width * 1.2);
+		isPrimary = alignLeft;
+	}
+
+	// Constructor - initialize a reference to the game
+	Deck.opponent(this.game) {
+		cards = List<Card>();
+		screenCenter = Position(
+			game.screenSize.width / 2, 
+			game.screenSize.height / 2
+		);
+		double width = game.tileSize * 0.70;
+		cardSize = Size(width, width * 1.2);
+		isPrimary = !alignLeft;
 	}
 
 	// Randomizes the order of the deck (shuffling the cards)

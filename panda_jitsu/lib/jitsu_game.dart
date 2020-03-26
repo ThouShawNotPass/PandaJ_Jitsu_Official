@@ -26,13 +26,13 @@ class JitsuGame extends Game {
 	Tray tray;
 
 	JitsuGame() {
-		initialize(); // constructors cannot be async but this function can be
+		initialize(); 
 	}
 
 	// Initialize the game. Should be called exactly once, using async to wait for screenSize via initialDimensions() method call
 	void initialize() async {
-		resize(await Flame.util.initialDimensions()); // get dimensions of the current screen (returns a Future<Size> object)
-		
+		resize(await Flame.util.initialDimensions());
+
 		// Create instances of our objects
 		background = Dojo(this); // bg
 		frame = Frame(this); // frame
@@ -50,15 +50,18 @@ class JitsuGame extends Game {
 		myDeck.add(Card(this, myDeck, Element.water, 1, true)); // add to deck
 		myDeck.shuffle(); // shuffle the deck
 
-		theirDeck = Deck(this); // deck
+		theirDeck = Deck.opponent(this); // deck
 		theirDeck.add(Card(this, theirDeck, Element.fire, 1, false)); 
 		theirDeck.add(Card(this, theirDeck, Element.water, 1, false)); 
 		theirDeck.add(Card(this, theirDeck, Element.snow, 1, false)); 
-		theirDeck.add(Card(this, theirDeck, Element.fire, 1, false)); 
+		theirDeck.add(Card(this, theirDeck, Element.snow, 1, false)); 
+		theirDeck.add(Card(this, theirDeck, Element.snow, 1, false)); 
+		theirDeck.add(Card(this, theirDeck, Element.snow, 1, false)); 
+		theirDeck.add(Card(this, theirDeck, Element.fire, 1, false));
 		theirDeck.add(Card(this, theirDeck, Element.water, 1, false)); 
 		theirDeck.shuffle(); // shuffle the deck
 
-		tray = Tray(this, myDeck, 5); // create tray
+		tray = Tray(this, myDeck, 5, theirDeck, 5); // create tray
 	}
 
 	// Calculates the size of the current screen and updates instance variable. This method is typically only called when the screen size changes, such as when the device is rotated by the user.
@@ -71,13 +74,12 @@ class JitsuGame extends Game {
 	void render(Canvas canvas) {
 		background.render(canvas); // draw background
 		frame.render(canvas); // draw the frame
-		// tray.render(canvas);
+		tray.render(canvas);
 	}
 
 	// update the position of the components before next render
 	void update(double t) {
-		print(tray);
-		// tray.update(t);
+		tray.update(t);
 	}
 
 	// this is called when we are passed a tap event
