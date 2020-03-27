@@ -145,7 +145,7 @@ class Tray {
 		updateCards(mySlots, mySize, myDeck, myPot, t);
 		updateCards(comSlots, comSize, comDeck, comPot, t);
 		if (bothCardsReady() && !hasBeenFlipped) {
-			print('Flipped!');
+			hasBeenFlipped = true;
 			comPot.flip();
 		}
 	}

@@ -150,9 +150,8 @@ class Card {
 			targetSize.height - shape.height
 		);
 		// Note: we compute the 'distanceSquared' because its faster
-		if (toTarget.distanceSquared > 0.1) { // shrink shape
-			double step = game.tileSize * t / speed;
-			if (toTarget.distanceSquared > step * step) {
+		double step = 0.4;
+			if (toTarget.distanceSquared > 0.1) {
 				setShape(Rect.fromCenter(
 					center: shape.center,
 					width: shape.width + step * toTarget.dx,
@@ -182,7 +181,6 @@ class Card {
 					}
 				}
 			}
-		}
 	}
 
 	// Tries to take a small step toward the targetLocation if it needs to
