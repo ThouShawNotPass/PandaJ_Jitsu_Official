@@ -30,49 +30,57 @@ class Card {
 	// Main Constructor - main one that builds everything
 	Card(this.game, this.deck, Element el, int lvl, bool faceUp) {
 		// centered horizontally and vertically offscreen below the screen
-		targetLocation = Position( 
+		setTargetLocation(Position( 
 			(deck.screenCenter.x) - (deck.cardSize.width / 2),
 			(deck.screenCenter.y * 2)
-		);
-		targetSize = Size(
+		));
+		setTargetSize(Size(
 			deck.cardSize.width, 
 			deck.cardSize.height
-		);
-		shape = Rect.fromLTWH(
+		));
+		setShape(Rect.fromLTWH(
 			targetLocation.x, 
 			targetLocation.y, 
 			targetSize.width, 
 			targetSize.height
-		);
+		));
 		isFaceUp = faceUp; // this must come before setColorFromElement()
 		type = el;
 		level = lvl;
-		status = CardStatus.inDeck;
-		_setSpriteFromElement(el);
+		setCardStatus(CardStatus.inDeck);
+		_updateSprite(el);
 	}
 
 	// Determines the color of the card based on the element type. This method relys on the isFaceUp boolean instance variable being defined (not null)
-	void _setSpriteFromElement(Element type) {
+	void _updateSprite(Element type) {
 		if (isFaceUp) {
 			switch (type) {
 				case Element.fire:
-					style = Sprite('cards/fire-card.png');
+					setStyle(Sprite('cards/fire-card.png'));
 					break;
 				case Element.water:
-					style = Sprite('cards/water-card.png');
+					setStyle(Sprite('cards/water-card.png'));
 					break;
-				default: // case Element.snow (or type is null)
-					style = Sprite('cards/snow-card.png');
+				case Element.snow:
+					setStyle(Sprite('cards/snow-card.png'));
+					break;
+				default: // called if type is null
+					setStyle(Sprite('cards/back-side.png'));
 					break;
 			}
 		} else {
-			style = Sprite('cards/back-side.png');
+			setStyle(Sprite('cards/back-side.png'));
 		}
 	}
 
-	// Returns a new Rect object that has been expanded by the given factor
-	Rect inflateByFactor(double n) {
-		return Rect.fromLTWH(shape.left, shape.top, n * shape.width, n * shape.height);
+	// Sets the current shape to one that has been expanded by the given factor
+	void inflateByFactor(double n) {
+		setShape(Rect.fromLTWH(
+			shape.left, 
+			shape.top, 
+			n * shape.width, 
+			n * shape.height
+		));
 	}
 
 	// Returns whether the card shape contains the given point
@@ -85,9 +93,34 @@ class Card {
 		return targetLocation.equals(Position(shape.left, shape.right));
 	}
 
+	// Toggles the value of isFaceUp
+	void _toggleFaceUp() {
+		isFaceUp = !isFaceUp;
+	}
+
+	// Sets the current shape to the given rectangle
+	void setShape(Rect r) {
+		shape = r;
+	}
+
+	// Sets the style to the givne sprite
+	void setStyle(Sprite s) {
+		style = s;
+	}
+
+	// Sets the current element type
+	void setCardStatus(CardStatus s) {
+		status = s;
+	}
+
 	// Sets the target location of the current card
-	void setTargetLocation(Position pt) {
-		targetLocation = pt;
+	void setTargetLocation(Position p) {
+		targetLocation = p;
+	}
+
+	// Sets the target size of the current card
+	void setTargetSize(Size s) {
+		targetSize = s;
 	}
 
 	// Draws the current shape to the given canvas
@@ -97,50 +130,82 @@ class Card {
 
 	// Animates a card-flip action
 	void flip() {
-		targetSize = Size(0, deck.cardSize.height);
+		targetSize = Size(0, shape.height);
 	}
 
 	// Updates the position of the card by shifting the top, left coordinate by a small step if the translation is large or shifting it directly to the target point if the translation is small
 	void _updatePosition(double t) {
 		Offset toTarget = Offset(targetLocation.x, targetLocation.y) - Offset(shape.left, shape.top);
-		if (toTarget.distance > 0) {
+		// Note: we compute the distanceSquared because its faster
+		if (toTarget.distanceSquared > 0) {
 			double step = game.tileSize * speed * t; // dist card moves
-			if (step < toTarget.distance) { // more than one step to go
+			if (toTarget.distance > step) { // more than one step to go
 				Offset smStep = Offset.fromDirection(toTarget.direction, step);
-				shape = shape.shift(smStep);
+				setShape(shape.shift(smStep));
 			} else { // less than a step to go
-				shape = shape.shift(toTarget); // we are there!
+				setShape(shape.shift(toTarget)); // we are there!
 			}
 		}
 	}
 
 	// Updates the shape of the card while preserving center allignment. This method will preserve the center position of the card while updating.
 	void _updateSize(double t) {
-
+		Offset toTarget = Offset( // the amount to grow/shrink shape (+/-)
+			targetSize.width - shape.width, 
+			targetSize.height - shape.height
+		);
+		// Note: we compute the 'distanceSquared' because its faster
+		if (toTarget.distanceSquared > 0) { // shrink shape
+			double step = game.tileSize * t / speed;
+			if (toTarget.distanceSquared > step * step) {
+				setShape(Rect.fromCenter(
+					center: shape.center,
+					width: shape.width + step * toTarget.dx,
+					height: shape.height + step * toTarget.dy
+				));
+			} else {
+				setShape(Rect.fromCenter(
+					center: shape.center,
+					width: targetSize.width,
+					height: targetSize.height
+				));
+				// flip card if either width or height are zero
+				if  (shape.width == 0 || shape.height == 0) {
+					_toggleFaceUp();
+					_updateSprite(type);
+					// return card to original form factor
+					if (shape.width == 0) {
+						setTargetSize(Size(
+							0.833333 * shape.height, 
+							shape.height
+						));
+					} else { // shape.height == 0
+						setTargetSize(Size(
+							shape.width, 
+							1.2 * shape.width
+						));
+					}
+				}
+			}
+		}
 	}
 
 	// Tries to take a small step toward the targetLocation if it needs to
 	void update(double t) {
-		// update the position of the card
 		_updatePosition(t);
-		
-		// updates the shape of the card
 		_updateSize(t);
-
-		// update the style of the card
-		_setSpriteFromElement(type);
 	}
 
 	// This method is only called when the card has been selected
 	void onTap() {
 		if (status == CardStatus.inHand) { // only cards in hand are tappable
 			double n; // inflation factor
-			if (deck.isSmall) {
-				n = 3.0; // for the tiny opponent's cards => make same size
+			if (deck.isMine()) {
+				n = 1.5; // for regular sized cards
 			} else {
-				n = 1.5; // for regular sized cars
+				n = 3.0; // for the tiny opponent's cards => make same size
 			}
-			shape = inflateByFactor(n);
+			inflateByFactor(n);
 			Position thePot = Position( // default left target
 				(deck.screenCenter.x) - (2 * shape.width),
 				(deck.screenCenter.y) - (shape.height / 2)
@@ -149,7 +214,7 @@ class Card {
 				thePot = thePot.add(Position(3 * shape.width, 0));
 			}
 			setTargetLocation(thePot);
-			status = CardStatus.inPot;
+			setCardStatus(CardStatus.inPot);
 		}
 	}
 }

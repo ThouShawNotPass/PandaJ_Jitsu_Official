@@ -57,6 +57,11 @@ class Deck {
 		return cards.isEmpty;
 	}
 
+	// Returns true if the deck is owned by the player
+	bool isMine() {
+		return !isSmall;
+	}
+
 	// Removes and returns the first Card in the deck. This method will return null if the deck is empty.
 	Card draw() {
 		Card result;
