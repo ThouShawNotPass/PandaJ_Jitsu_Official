@@ -57,8 +57,7 @@ class Tray {
 
 	// Returns whether both player's cards are in the middle 'pot'
 	bool isReadyForReveal() {
-		return 	myPot != null && myPot.isDoneMoving() &&	
-				comPot != null && comPot.isDoneMoving();
+		return myPot?.isDoneMoving() != null && comPot?.isDoneMoving() != null;
 	}
 
 	// Renders the players names based on which side their deck is on
@@ -129,15 +128,15 @@ class Tray {
 		renderCards(comSlots, comPot, c); // render opponents cards
 		renderCards(mySlots, myPot, c); // render my cards
 		renderNames(myDeck, c);
-		if (isReadyForReveal()) {
-			comPot.flip();
-		}
 	}
 
 	// Loops through the five mySlots and makes sure they are all full. If not, it will draw the next card from the deck to fill the open slot.
 	void update(double t) {
 		updateCards(mySlots, mySize, myDeck, myPot, t);
 		updateCards(comSlots, comSize, comDeck, comPot, t);
+		if (isReadyForReveal()) {
+			comPot.flip();
+		}
 	}
 
 	void handleTouchAt(Offset pt) {

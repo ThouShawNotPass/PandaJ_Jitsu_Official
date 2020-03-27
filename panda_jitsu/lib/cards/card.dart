@@ -81,57 +81,38 @@ class Card {
 			n * shape.width, 
 			n * shape.height
 		));
+		setTargetSize(Size(shape.width, shape.height));
 	}
 
 	// Returns whether the card shape contains the given point
-	bool containsPoint(Offset pt) {
-		return shape.contains(pt);
-	}
+	bool containsPoint(Offset pt) => shape.contains(pt);
 
 	// Returns whether the card is done translating
-	bool isDoneMoving() {
-		return targetLocation.equals(Position(shape.left, shape.right));
-	}
+	bool isDoneMoving() => targetLocation.equals(Position(shape.left, shape.right));
 
 	// Toggles the value of isFaceUp
-	void _toggleFaceUp() {
-		isFaceUp = !isFaceUp;
-	}
+	void _toggleFaceUp() => isFaceUp = !isFaceUp;
 
 	// Sets the current shape to the given rectangle
-	void setShape(Rect r) {
-		shape = r;
-	}
+	void setShape(Rect r) => shape = r;
 
 	// Sets the style to the givne sprite
-	void setStyle(Sprite s) {
-		style = s;
-	}
+	void setStyle(Sprite s) => style = s;
 
 	// Sets the current element type
-	void setCardStatus(CardStatus s) {
-		status = s;
-	}
+	void setCardStatus(CardStatus s) => status = s;
 
 	// Sets the target location of the current card
-	void setTargetLocation(Position p) {
-		targetLocation = p;
-	}
+	void setTargetLocation(Position p) => targetLocation = p;
 
 	// Sets the target size of the current card
-	void setTargetSize(Size s) {
-		targetSize = s;
-	}
+	void setTargetSize(Size s) => targetSize = s;
 
 	// Draws the current shape to the given canvas
-	void render(Canvas c) {
-		style.renderRect(c, shape);
-	}
+	void render(Canvas c) => style.renderRect(c, shape);
 
 	// Animates a card-flip action
-	void flip() {
-		targetSize = Size(0, shape.height);
-	}
+	void flip() => setTargetSize(Size(0, shape.height));
 
 	// Updates the position of the card by shifting the top, left coordinate by a small step if the translation is large or shifting it directly to the target point if the translation is small
 	void _updatePosition(double t) {
