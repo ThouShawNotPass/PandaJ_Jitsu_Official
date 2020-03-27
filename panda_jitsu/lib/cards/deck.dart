@@ -16,7 +16,7 @@ class Deck {
 	final JitsuGame game; // reference to the game logic
 
 	bool alignLeft; // true if deck is on the left side
-	bool isSmall; // true if opponent's card, false if yours
+	bool isMine; // true if my card, false if theirs
 	List<Card> cards; // private queue-like data structure
 	Position screenCenter;
 	Size cardSize;
@@ -31,7 +31,7 @@ class Deck {
 		double width = game.tileSize * 1.4;
 		cardSize = Size(width, width * 1.2);
 		alignLeft = playerOnLeft;
-		isSmall = false;
+		isMine = true; // my deck
 	}
 
 	// Constructor - initialize a reference to the game
@@ -44,7 +44,7 @@ class Deck {
 		double width = game.tileSize * 0.70;
 		cardSize = Size(width, width * 1.2);
 		alignLeft = !playerOnLeft;
-		isSmall = true;
+		isMine = false; // their deck
 	}
 
 	// Randomizes the order of the deck (shuffling the cards)
@@ -54,7 +54,7 @@ class Deck {
 	bool isEmpty() => cards.isEmpty;
 
 	// Returns true if the deck is owned by the player
-	bool isMine() => !isSmall;
+	bool isMyCard() => isMine;
 
 	// Removes and returns the first Card in the deck. This method will return null if the deck is empty.
 	Card draw() {

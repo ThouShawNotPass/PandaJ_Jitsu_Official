@@ -9,7 +9,10 @@ import 'package:panda_jitsu/card_status.dart'; // status enum to describe the cu
 import 'package:panda_jitsu/element.dart'; // element enum (fire, water, snow)
 import 'package:panda_jitsu/jitsu_game.dart';
 
-// The card class is a super class to child element cards and will be a parent to the individual power cards (level ten and up). Each card object can keep track of its own element type (fire, water, snow), its level (currently only one through nine) and whether or not the card should be displayed as "face-up".
+
+/// A rectangular playing-card object.
+/// 
+/// The card class is a super class to child element cards and will be a parent to the individual power cards (level ten and up). Each card object can keep track of its own element type (fire, water, snow), its level (currently only one through nine) and whether or not the card should be displayed as "face-up".
 class Card {
 
 	static const int speed = 1;
@@ -27,7 +30,7 @@ class Card {
     bool isFaceUp; // which side of the card should we show
     CardStatus status; // which side of the card should we show
 
-	// Main Constructor - main one that builds everything
+	/// Constructs a new card object.
 	Card(this.game, this.deck, Element el, int lvl, bool faceUp) {
 		// centered horizontally and vertically offscreen below the screen
 		setTargetLocation(Position( 
@@ -51,7 +54,9 @@ class Card {
 		_updateSprite(el);
 	}
 
-	// Determines the color of the card based on the element type. This method relys on the isFaceUp boolean instance variable being defined (not null)
+	/// Determines the color of the card based on the element type. 
+	/// 
+	/// This method relys on the isFaceUp boolean instance variable being defined (it should not be null).
 	void _updateSprite(Element type) {
 		if (isFaceUp) {
 			switch (type) {
@@ -73,7 +78,7 @@ class Card {
 		}
 	}
 
-	// Sets the current shape to one that has been expanded by the given factor
+	/// Inflates the current shape by the given factor.
 	void inflateByFactor(double n) {
 		setShape(Rect.fromLTWH(
 			shape.left, 
@@ -82,39 +87,42 @@ class Card {
 			n * shape.height
 		));
 		setTargetSize(Size(shape.width, shape.height));
+		print('size is now: ' + shape.width + 'by' + shape.height);
 	}
 
-	// Returns whether the card shape contains the given point
+	/// Returns whether the card shape contains the given point.
 	bool containsPoint(Offset pt) => shape.contains(pt);
 
-	// Returns whether the card is done translating
+	/// Returns whether the card is done translating.
 	bool isDoneMoving() => targetLocation.equals(Position(shape.left, shape.right));
 
-	// Toggles the value of isFaceUp
+	/// Toggles the value of isFaceUp
 	void _toggleFaceUp() => isFaceUp = !isFaceUp;
 
-	// Sets the current shape to the given rectangle
+	/// Sets the current shape to the given rectangle.
 	void setShape(Rect r) => shape = r;
 
-	// Sets the style to the givne sprite
+	/// Sets the style to the given Sprite.
 	void setStyle(Sprite s) => style = s;
 
-	// Sets the current element type
+	/// Sets the current element type of the current card.
 	void setCardStatus(CardStatus s) => status = s;
 
-	// Sets the target location of the current card
+	/// Sets the target location of the current card.
 	void setTargetLocation(Position p) => targetLocation = p;
 
-	// Sets the target size of the current card
+	/// Sets the target size of the current card.
 	void setTargetSize(Size s) => targetSize = s;
 
-	// Draws the current shape to the given canvas
+	/// Draws the current shape to the given canvas.
 	void render(Canvas c) => style.renderRect(c, shape);
 
-	// Animates a card-flip action
+	/// Animates a card-flip action.
 	void flip() => setTargetSize(Size(0, shape.height));
 
-	// Updates the position of the card by shifting the top, left coordinate by a small step if the translation is large or shifting it directly to the target point if the translation is small
+	/// Updates the position of the card.
+	/// 
+	/// Updates the position of the card by shifting the top, left coordinate by a small step if the translation is large or shifting it directly to the target point if the translation is small
 	void _updatePosition(double t) {
 		Offset toTarget = Offset(targetLocation.x, targetLocation.y) - Offset(shape.left, shape.top);
 		// Note: we compute the distanceSquared because its faster
@@ -129,7 +137,9 @@ class Card {
 		}
 	}
 
-	// Updates the shape of the card while preserving center allignment. This method will preserve the center position of the card while updating.
+	/// Updates the size of the card.
+	/// 
+	/// Updates the size of the card while preserving center allignment. This method will preserve the center position of the card while updating.
 	void _updateSize(double t) {
 		Offset toTarget = Offset( // the amount to grow/shrink shape (+/-)
 			targetSize.width - shape.width, 
@@ -177,11 +187,11 @@ class Card {
 		_updateSize(t);
 	}
 
-	// This method is only called when the card has been selected
+	/// Sends the current card to the pot.
 	void sendToPot() {
 		if (status == CardStatus.inHand) { // only cards in hand are tappable
 			double n; // inflation factor
-			if (deck.isMine()) {
+			if (deck.isMyCard()) {
 				n = 1.5; // for regular sized cards
 			} else {
 				n = 3.0; // for the tiny opponent's cards => make same size

@@ -52,12 +52,6 @@ class Tray {
 		myName = "SENSEI";
 	}
 
-	// Picks a random card from the opponents hand and puts it in the pot
-	void _sendCardToPot(Card c, Card p) {
-		c.sendToPot();
-		p = c;
-	}
-
 	// Returns whether both player's cards are in the middle 'pot'
 	bool bothCardsReady() {
 		bool myCardReady = myPot != null && myPot.isDoneMoving();
@@ -140,6 +134,7 @@ class Tray {
 		updateCards(mySlots, mySize, myDeck, myPot, t);
 		updateCards(comSlots, comSize, comDeck, comPot, t);
 		if (bothCardsReady()) {
+			print('Flipped!');
 			comPot.flip();
 		}
 	}
@@ -151,8 +146,10 @@ class Tray {
 					if (card.containsPoint(pt)) {
 						int i = Random().nextInt(comSize);
 						Card comCard = comSlots.elementAt(i);
-						_sendCardToPot(comCard, comPot);
-						_sendCardToPot(card, myPot);
+						comCard.sendToPot();
+						comPot = card;
+						card.sendToPot();
+						myPot = card;
 					}
 				});
 			}
