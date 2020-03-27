@@ -60,8 +60,10 @@ class Tray {
 	}
 
 	// Returns whether both player's cards are in the middle 'pot'
-	bool isReadyForReveal() {
-		return myPot?.isDoneMoving() != null && comPot?.isDoneMoving() != null;
+	bool bothCardsReady() {
+		bool myCardReady = myPot != null && myPot.isDoneMoving();
+		bool comCardReady = comPot != null && comPot.isDoneMoving();
+		return myCardReady && comCardReady;
 	}
 
 	// Renders the players names based on which side their deck is on
@@ -138,7 +140,7 @@ class Tray {
 	void update(double t) {
 		updateCards(mySlots, mySize, myDeck, myPot, t);
 		updateCards(comSlots, comSize, comDeck, comPot, t);
-		if (isReadyForReveal()) {
+		if (bothCardsReady()) {
 			comPot.flip();
 		}
 	}
