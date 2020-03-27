@@ -101,8 +101,8 @@ class Tray {
 	// Updates the given list of cards and given pot card to the canvas.
 	void updateCards(List<Card> slot, int size, Deck deck, Card pot, double t) {
 		if (slot != null && slot.isNotEmpty) { // check the the slot
-			for (int i = 0; i < size; i++) { // loop through each mySlots
-				// check all mySlots are filled
+			for (int i = 0; i < size; i++) { // loop through each slots
+				// check all slots are filled
 				if (slot.elementAt(i) == null || slot.elementAt(i).status != CardStatus.inHand) { 
 					Card nextCard =	deck.draw(); // if not, draw a new card
 					Position openSlot = getSlotFromIndex(i, deck);
@@ -111,12 +111,13 @@ class Tray {
 					slot[i] = nextCard; // fill the slot with reference to card
 				}
 			}
-			// update all the cards in the mySlots (now they should all be full)
+			// update all the cards in the slots (now they should all be full)
 			slot.forEach((Card card) {
 				card.update(t);
 			});
 		}
 		if (pot != null) {
+			print('updating pot...');
 			pot.update(t);
 		}
 	}
@@ -125,7 +126,7 @@ class Tray {
 	void render(Canvas c) {
 		traySprite.renderRect(c, trayArea); // render tray background
 		renderCards(comSlots, comPot, c); // render opponents cards
-		renderCards(mySlots, myPot, c); // render my cards
+		//renderCards(mySlots, myPot, c); // render my cards
 		renderNames(myDeck, c);
 	}
 
@@ -146,10 +147,10 @@ class Tray {
 					if (card.containsPoint(pt)) {
 						int i = Random().nextInt(comSize);
 						Card comCard = comSlots.elementAt(i);
-						comCard.sendToPot();
 						comPot = card;
-						card.sendToPot();
+						comCard.sendToPot();
 						myPot = card;
+						card.sendToPot();
 					}
 				});
 			}

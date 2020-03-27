@@ -87,7 +87,6 @@ class Card {
 			n * shape.height
 		));
 		setTargetSize(Size(shape.width, shape.height));
-		print('size is now: ' + shape.width + 'by' + shape.height);
 	}
 
 	/// Returns whether the card shape contains the given point.
@@ -128,7 +127,7 @@ class Card {
 		// Note: we compute the distanceSquared because its faster
 		if (toTarget.distanceSquared > 0) {
 			double step = game.tileSize * speed * t; // dist card moves
-			if (toTarget.distance > step) { // more than one step to go
+			if (toTarget.distanceSquared > step * step) { // more than one step to go
 				Offset smStep = Offset.fromDirection(toTarget.direction, step);
 				setShape(shape.shift(smStep));
 			} else { // less than a step to go
@@ -146,7 +145,7 @@ class Card {
 			targetSize.height - shape.height
 		);
 		// Note: we compute the 'distanceSquared' because its faster
-		if (toTarget.distanceSquared > 0) { // shrink shape
+		if (toTarget.distanceSquared > 0.1) { // shrink shape
 			double step = game.tileSize * t / speed;
 			if (toTarget.distanceSquared > step * step) {
 				setShape(Rect.fromCenter(
@@ -202,7 +201,7 @@ class Card {
 				(deck.screenCenter.y) - (shape.height / 2)
 			);
 			if (!deck.alignLeft) { // set right target instead
-				newPos = newPos.add(Position(3 * shape.width, 0));
+				// newPos = newPos.add(Position(3 * shape.width, 0));
 			}
 			setTargetLocation(newPos);
 			setCardStatus(CardStatus.inPot);
