@@ -33,9 +33,9 @@ class Tray {
 	List<Card> mySlots;
 	Offset trayPos; // top left of the tray
   	Rect trayArea; // rectangular area of the tray
-	Sprite traySprite; // tray image (png)
-	String myName;
 	String comName;
+	String myName;
+	Sprite traySprite; // tray image (png)
 	
 	Tray(this.game, this.myDeck, this.mySize, this.comDeck, this.comSize) {
 		comSlots = List<Card>(comSize);
