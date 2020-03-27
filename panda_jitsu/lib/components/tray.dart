@@ -14,8 +14,12 @@ import 'package:panda_jitsu/jitsu_game.dart';
 // This class will handle the bottom part of the screen, including where cards should be diverted and keeps track of empty mySlots as cards are selected.
 class Tray {
 
-	static const double paddingFactor = 1.2;
-	static const TextConfig config = TextConfig(fontSize: 20.0, fontFamily: 'Julee');
+	static const double paddingFactor = 1.2; // padding between cards
+	static const TextConfig config = TextConfig(
+		color: Color(0xFF000000),
+		fontSize: 20.0, 
+		fontFamily: 'Julee'
+	); // configures a text feature
 
 	final Deck myDeck;
 	final Deck comDeck;
