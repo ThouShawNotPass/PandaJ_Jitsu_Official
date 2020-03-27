@@ -178,7 +178,7 @@ class Card {
 	}
 
 	// This method is only called when the card has been selected
-	void onTap() {
+	void sendToPot() {
 		if (status == CardStatus.inHand) { // only cards in hand are tappable
 			double n; // inflation factor
 			if (deck.isMine()) {
@@ -187,14 +187,14 @@ class Card {
 				n = 3.0; // for the tiny opponent's cards => make same size
 			}
 			inflateByFactor(n);
-			Position thePot = Position( // default left target
+			Position newPos = Position( // default left target
 				(deck.screenCenter.x) - (2 * shape.width),
 				(deck.screenCenter.y) - (shape.height / 2)
 			);
 			if (!deck.alignLeft) { // set right target instead
-				thePot = thePot.add(Position(3 * shape.width, 0));
+				newPos = newPos.add(Position(3 * shape.width, 0));
 			}
-			setTargetLocation(thePot);
+			setTargetLocation(newPos);
 			setCardStatus(CardStatus.inPot);
 		}
 	}

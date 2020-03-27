@@ -53,10 +53,9 @@ class Tray {
 	}
 
 	// Picks a random card from the opponents hand and puts it in the pot
-	void pickRandomComCard() {
-		Card card = comSlots.elementAt(Random().nextInt(comSize));
-		comPot = card;
-		card.onTap();
+	void _sendCardToPot(Card c, Card p) {
+		c.sendToPot();
+		p = c;
 	}
 
 	// Returns whether both player's cards are in the middle 'pot'
@@ -150,9 +149,10 @@ class Tray {
 			if (mySlots != null && mySlots.isNotEmpty) {
 				mySlots.forEach((Card card) {
 					if (card.containsPoint(pt)) {
-						pickRandomComCard();
-						myPot = card;
-						card.onTap();
+						int i = Random().nextInt(comSize);
+						Card comCard = comSlots.elementAt(i);
+						_sendCardToPot(comCard, comPot);
+						_sendCardToPot(card, myPot);
 					}
 				});
 			}
