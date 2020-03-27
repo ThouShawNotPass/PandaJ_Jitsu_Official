@@ -48,19 +48,13 @@ class Deck {
 	}
 
 	// Randomizes the order of the deck (shuffling the cards)
-	void shuffle() {		
-		cards.shuffle();
-	}
+	void shuffle() => cards.shuffle();
 
 	// Return true if the deck contains no cards.
-	bool isEmpty() {
-		return cards.isEmpty;
-	}
+	bool isEmpty() => cards.isEmpty;
 
 	// Returns true if the deck is owned by the player
-	bool isMine() {
-		return !isSmall;
-	}
+	bool isMine() => !isSmall;
 
 	// Removes and returns the first Card in the deck. This method will return null if the deck is empty.
 	Card draw() {

@@ -12,7 +12,7 @@ import 'package:panda_jitsu/jitsu_game.dart';
 // The card class is a super class to child element cards and will be a parent to the individual power cards (level ten and up). Each card object can keep track of its own element type (fire, water, snow), its level (currently only one through nine) and whether or not the card should be displayed as "face-up".
 class Card {
 
-	static const int speed = 5;
+	static const int speed = 1;
 
 	final JitsuGame game;
 	final Deck deck;
