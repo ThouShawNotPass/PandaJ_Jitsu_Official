@@ -11,7 +11,7 @@ import 'package:panda_jitsu/jitsu_game.dart';
 
 class Deck {
 
-	static const playerOnLeft = true; // which side the player should go on
+	static const playerOnLeft = false; // which side the player should go on
 
 	final JitsuGame game; // reference to the game logic
 
@@ -71,8 +71,8 @@ class Deck {
 	}
 
 	// The cards in the deck are not rendered (off screen)
-	void render(Canvas c) {}
+	//void render(Canvas c) {}
 
 	// The cards in the deck are not updated (off screen)
-	void update(Canvas c) {}
+	//void update(Canvas c) {}
 }

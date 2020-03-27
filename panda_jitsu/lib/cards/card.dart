@@ -51,13 +51,13 @@ class Card {
 		type = el;
 		level = lvl;
 		setCardStatus(CardStatus.inDeck);
-		_updateSprite(el);
+		_updateSprite();
 	}
 
 	/// Determines the color of the card based on the element type. 
 	/// 
 	/// This method relys on the isFaceUp boolean instance variable being defined (it should not be null).
-	void _updateSprite(Element type) {
+	void _updateSprite() {
 		if (isFaceUp) {
 			switch (type) {
 				case Element.fire:
@@ -86,38 +86,43 @@ class Card {
 			n * shape.width, 
 			n * shape.height
 		));
-		setTargetSize(Size(shape.width, shape.height));
+		setTargetSize(Size(shape.width, shape.height)); // make new size persist
 	}
 
 	/// Returns whether the card shape contains the given point.
-	bool containsPoint(Offset pt) => shape.contains(pt);
+	bool contains(Offset point) => shape.contains(point);
 
 	/// Returns whether the card is done translating.
-	bool isDoneMoving() => targetLocation.equals(Position(shape.left, shape.right));
+	bool isDoneMoving() {
+		Offset dist = Offset(targetLocation.x - shape.left, targetLocation.y - shape.top);
+		return dist.distanceSquared < 0.001; // Note: solves 10^-27 overflow bug
+	}
 
 	/// Toggles the value of isFaceUp
 	void _toggleFaceUp() => isFaceUp = !isFaceUp;
 
 	/// Sets the current shape to the given rectangle.
-	void setShape(Rect r) => shape = r;
+	void setShape(Rect newRect) => shape = newRect;
 
 	/// Sets the style to the given Sprite.
-	void setStyle(Sprite s) => style = s;
+	void setStyle(Sprite newSprite) => style = newSprite;
 
 	/// Sets the current element type of the current card.
-	void setCardStatus(CardStatus s) => status = s;
+	void setCardStatus(CardStatus newStatus) => status = newStatus;
 
 	/// Sets the target location of the current card.
-	void setTargetLocation(Position p) => targetLocation = p;
+	void setTargetLocation(Position point) => targetLocation = point;
 
 	/// Sets the target size of the current card.
-	void setTargetSize(Size s) => targetSize = s;
+	void setTargetSize(Size newSize) => targetSize = newSize;
 
 	/// Draws the current shape to the given canvas.
 	void render(Canvas c) => style.renderRect(c, shape);
 
 	/// Animates a card-flip action.
-	void flip() => setTargetSize(Size(0, shape.height));
+	void flip() {
+		setTargetSize(Size(0, shape.height));
+	}
 
 	/// Updates the position of the card.
 	/// 
@@ -162,7 +167,7 @@ class Card {
 				// flip card if either width or height are zero
 				if  (shape.width == 0 || shape.height == 0) {
 					_toggleFaceUp();
-					_updateSprite(type);
+					_updateSprite();
 					// return card to original form factor
 					if (shape.width == 0) {
 						setTargetSize(Size(
@@ -201,7 +206,7 @@ class Card {
 				(deck.screenCenter.y) - (shape.height / 2)
 			);
 			if (!deck.alignLeft) { // set right target instead
-				// newPos = newPos.add(Position(3 * shape.width, 0));
+				newPos = newPos.add(Position(3 * shape.width, 0));
 			}
 			setTargetLocation(newPos);
 			setCardStatus(CardStatus.inPot);
