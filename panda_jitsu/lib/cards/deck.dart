@@ -11,6 +11,15 @@ import 'package:panda_jitsu/jitsu_game.dart';
 /// Abstracts away many of the list components, exposing only the queue-like structures. It is implemented as a list because the list class has a built-in shuffle() function.
 class Deck {
 
+	/// The width of a card in tiles.
+	static const double widthFactor = 1.4;
+
+	/// The ratio of width to height of a card.
+	/// 
+	/// Example: If a card had a width of 10, it would have a height of 12 because 10 * 1.2 = 12.
+	static const double cardRatio = 1.2;
+	
+	
 	/// A reference to the game logic.
 	final JitsuGame game;
 
@@ -22,7 +31,7 @@ class Deck {
 	bool isMine;
 
 	/// Queue-like deck structure to keep track of the cards.
-	List<Card> cards;
+	List<Card> cards = List<Card>();
 
 	/// The center of the device's screen.
 	Position screenCenter;
@@ -34,28 +43,28 @@ class Deck {
 
 	/// Constructs a new deck object for the player.
 	Deck(this.game) {
-		cards = List<Card>();
-		screenCenter = Position(
-			game.screenSize.width / 2, 
-			game.screenSize.height / 2
-		);
-		double width = game.tileSize * 1.4;
-		cardSize = Size(width, width * 1.2);
+		_setScreenCenter();
+		_setCardSizeFromWidth(game.tileSize * widthFactor);
 		alignLeft = game.isPlayerOnLeft();
 		isMine = true; // my deck
 	}
 
 	/// Constructs a new deck object for the opponent.
 	Deck.opponent(this.game) {
-		cards = List<Card>();
-		screenCenter = Position(
-			game.screenSize.width / 2, 
-			game.screenSize.height / 2
-		);
-		double width = game.tileSize * 0.70;
-		cardSize = Size(width, width * 1.2);
+		_setScreenCenter();
+		_setCardSizeFromWidth(game.tileSize * widthFactor / 2); // half size
 		alignLeft = !game.isPlayerOnLeft();
-		isMine = false; // their deck
+		isMine = false; // opponent's deck
+	}
+
+	/// Sets the center of the screen.
+	void _setScreenCenter() {
+		screenCenter = Position.fromOffset(game.screenSize.center(Offset.zero));
+	}
+
+	/// Sets the card size from the given width.
+	void _setCardSizeFromWidth(double width) {
+		cardSize = Size(width, width * cardRatio);
 	}
 
 	/// Randomizes the order of the deck.
@@ -83,14 +92,8 @@ class Deck {
 		return result;
 	}
 
-	// Adds the given card to the bottom of the deck structure.
+	/// Adds card to deck.
 	void add(Card newCard) {
 		cards.add(newCard);
 	}
-
-	// The cards in the deck are not rendered (off screen)
-	//void render(Canvas c) {}
-
-	// The cards in the deck are not updated (off screen)
-	//void update(Canvas c) {}
 }

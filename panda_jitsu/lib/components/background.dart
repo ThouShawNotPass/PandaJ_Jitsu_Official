@@ -7,7 +7,7 @@ import 'package:panda_jitsu/jitsu_game.dart';
 /// This is the background class which defines state of the background.
 /// 
 /// ### Screen Size: 
-/// Most mobile devices have a screen ratio somewhere between 12: and 18.5:9 so our bg has a 23:9 ratio and is horizontally centered with the left and right edges cropped off.
+/// Most mobile devices have a screen ratio somewhere between 12:9 and 18.5:9 so our bg has a 23:9 ratio and is horizontally centered with the left and right edges cropped off.
 class Background {
 
 	/// The image ratio (measured in tiles).
