@@ -32,7 +32,7 @@ class JitsuGame extends Game {
 	/// The maximum value of a card's power.
 	/// 
 	/// Ties are broken based on the power level of the card. Cards range in power between 1 and this value.
-	static const int maxPower = 9;
+	static const int maxPower = 12;
 
 
 	/// A reference to the player's deck.
@@ -111,7 +111,7 @@ class JitsuGame extends Game {
 				this, 
 				deck, 
 				_getRandomElement(), 
-				rand.nextInt(maxPower), 
+				rand.nextInt(maxPower) + 1, // (0,9) => (1,10) 
 				deck.isMyCard()
 			));
 		}

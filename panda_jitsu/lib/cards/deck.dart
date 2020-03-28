@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/position.dart';
 
 import 'package:panda_jitsu/cards/card.dart';
+import 'package:panda_jitsu/card_status.dart';
 import 'package:panda_jitsu/jitsu_game.dart';
 
 
@@ -99,7 +100,10 @@ class Deck {
 	}
 
 	/// Adds card to deck.
+	/// 
+	/// This will also set the CardStatus to CardStatus.inDeck.
 	void add(Card newCard) {
+		newCard.setCardStatus(CardStatus.inDeck);
 		cards.add(newCard);
 	}
 }

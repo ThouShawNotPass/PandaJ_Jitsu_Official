@@ -32,7 +32,7 @@ class Card {
 	static const int speed = 10;
 
 	/// The shrinkage factor of the upper-left card Sprites.
-	static const double shrinkFactor = 0.2;
+	static const double shrinkFactor = 0.33;
 
 
 	/// A reference to the Jitsu game.
@@ -50,8 +50,8 @@ class Card {
 	/// The card's overlay sprite.
 	Sprite overlay = Sprite('cards/overlay/blue-card.png');
 
-	/// The card's element symbol.
-	Sprite element = Sprite('cards/elements/fire.png');
+	/// The card's element level.
+	Sprite lvlSprite = Sprite('cards/levels/1.png');
 
 	/// The position of the card's target location.
 	Position targetLocation;
@@ -86,6 +86,8 @@ class Card {
 		setTargetSize(deck.cardSize);
 		setShape(targetLocation, targetSize);
 		setCardStatus(CardStatus.inDeck);
+		_setRandomOverlay();
+		_setLevelSprite();
 		_updateSprite();
 	}
 
@@ -112,6 +114,40 @@ class Card {
 		} else {
 			setStyle(Sprite('cards/base/back-side.png'));
 		}
+	}
+
+	/// Sets the overlay to a random color.
+	/// 
+	/// The default color is yellow.
+	void _setRandomOverlay() {
+		switch (game.rand.nextInt(6)) {
+			case 0:
+				overlay = Sprite('cards/overlay/yellow-card.png');
+				break;
+			case 1:
+				overlay = Sprite('cards/overlay/orange-card.png');
+				break;
+			case 2:
+				overlay = Sprite('cards/overlay/green-card.png');
+				break;
+			case 3:
+				overlay = Sprite('cards/overlay/blue-card.png');
+				break;
+			case 4:
+				overlay = Sprite('cards/overlay/red-card.png');
+				break;
+			case 5:
+				overlay = Sprite('cards/overlay/purple-card.png');
+				break;
+			default:
+				overlay = Sprite('cards/overlay/yellow-card.png');
+				break;
+		}
+	}
+
+	/// Sets the current card level.
+	void _setLevelSprite() {
+		lvlSprite = Sprite('cards/levels/' + level.toString() + '.png');
 	}
 
 	/// Inflates the current shape by the given factor.
@@ -162,11 +198,17 @@ class Card {
 		style.renderRect(c, shape);
 		if (isFaceUp) {
 			overlay.renderRect(c, shape);
-			element.renderRect(c, Rect.fromLTWH(
+			lvlSprite.renderRect(c, Rect.fromLTWH(
 				shape.left, 
 				shape.top, 
 				shape.width * shrinkFactor, 
 				shape.width * shrinkFactor
+			));
+			lvlSprite.renderRect(c, Rect.fromLTRB(
+				shape.right - shape.width * shrinkFactor, 
+				shape.bottom - shape.width * shrinkFactor, 
+				shape.right, 
+				shape.bottom
 			));
 		}
 	}
