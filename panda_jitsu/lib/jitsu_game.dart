@@ -7,7 +7,7 @@ import 'package:flutter/gestures.dart';
 
 import 'package:panda_jitsu/cards/card.dart'; // individual card
 import 'package:panda_jitsu/cards/deck.dart'; // the deck object
-import 'package:panda_jitsu/components/dojo.dart'; // background
+import 'package:panda_jitsu/components/background.dart'; // background
 import 'package:panda_jitsu/components/frame.dart'; // frame
 import 'package:panda_jitsu/components/tray.dart'; // card tray
 import 'package:panda_jitsu/element.dart'; // the element
@@ -29,6 +29,11 @@ class JitsuGame extends Game {
 	/// The number of cards to generate for each deck.
 	static const int numCardsInDeck = 10;
 
+	/// The maximum value of a card's power.
+	/// 
+	/// Ties are broken based on the power level of the card. Cards range in power between 1 and this value.
+	static const int maxPower = 9;
+
 
 	/// A reference to the player's deck.
 	Deck myDeck;
@@ -39,8 +44,8 @@ class JitsuGame extends Game {
 	/// The number of pixels per tile.
 	double tileSize;
 
-	/// The background dojo Sprite.
-	Dojo background;
+	/// The background Sprite.
+	Background background;
 
 	/// The border Sprite that lines the edge of the screen.
 	Frame frame;
@@ -69,18 +74,16 @@ class JitsuGame extends Game {
 	void _initialize() async {
 		resize(await Flame.util.initialDimensions());
 
-		// Create instances of our objects
-		background = Dojo(this); // bg
-		frame = Frame(this); // frame
-
-		myDeck = Deck(this); // deck
+		myDeck = Deck(this);
 		_loadDeckFromUser(myDeck);
 		myDeck.shuffle(); // shuffle the deck
 
-		theirDeck = Deck.opponent(this); // deck
+		theirDeck = Deck.opponent(this);
 		_loadDeckFromUser(theirDeck);
 		theirDeck.shuffle(); // shuffle the deck
 
+		background = Background(this);
+		frame = Frame(this);
 		tray = Tray(this, myDeck, numCardsInHand, theirDeck, numCardsInHand);
 	}
 
@@ -101,14 +104,14 @@ class JitsuGame extends Game {
 		return result;
 	}
 
-	/// Loads the given user's deck of cards.
+	/// Loads and returns the given user's deck of cards.
 	void _loadDeckFromUser(Deck deck) {
-		for (int i = 0; i < numCardsInHand; i++) {
+		for (int i = 0; i < numCardsInDeck; i++) {
 			deck.add(Card(
 				this, 
 				deck, 
 				_getRandomElement(), 
-				rand.nextInt(numCardsInDeck), 
+				rand.nextInt(maxPower), 
 				deck.isMyCard()
 			));
 		}
@@ -122,23 +125,23 @@ class JitsuGame extends Game {
 	/// This method is typically only called when the screen size changes, such as when the device is rotated by the user.
 	void resize(Size size) {
 		screenSize = size;
-		tileSize = size.height / verticalSections; // the screen will be 9 'tiles' high
+		tileSize = size.height / verticalSections;
 	}
 
 	/// Paints the components to the next canvas.
 	void render(Canvas canvas) {
-		background.render(canvas); // draw background
-		frame.render(canvas); // draw the frame
+		background.render(canvas);
+		frame.render(canvas);
 		tray.render(canvas);
 	}
 
 	/// Updates the state of the components.
-	void update(double t) {
-		tray.update(t);
+	void update(double timeDelta) {
+		tray.update(timeDelta);
 	}
 
 	/// Handles an onTapDown event.
-	void onTapDown(TapDownDetails d) {
-		tray.handleTouchAt(d.globalPosition);
+	void onTapDown(TapDownDetails tap) {
+		tray.handleTouchAt(tap.globalPosition);
 	}
 }

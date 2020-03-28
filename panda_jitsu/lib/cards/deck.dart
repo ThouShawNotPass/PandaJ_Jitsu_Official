@@ -53,6 +53,9 @@ class Deck {
 	// Returns true if the deck is owned by the player
 	bool isMyCard() => isMine;
 
+	/// Returns the number of cards in the deck.
+	int size() => cards.length;
+
 	// Removes and returns the first Card in the deck. This method will return null if the deck is empty.
 	Card draw() {
 		Card result;

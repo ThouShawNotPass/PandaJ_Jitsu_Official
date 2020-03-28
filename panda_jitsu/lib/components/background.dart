@@ -4,11 +4,11 @@ import 'package:flame/sprite.dart';
 
 import 'package:panda_jitsu/jitsu_game.dart';
 
-/// This is the dojo background class which defines state of the background.
+/// This is the background class which defines state of the background.
 /// 
 /// ### Screen Size: 
 /// Most mobile devices have a screen ratio somewhere between 12: and 18.5:9 so our bg has a 23:9 ratio and is horizontally centered with the left and right edges cropped off.
-class Dojo {
+class Background {
 
 	/// The image ratio (measured in tiles).
 	static const Size bgRatio = Size(23, 9); 
@@ -24,8 +24,8 @@ class Dojo {
 	/// The background Sprite asset.
 	Sprite bgSprite;
 
-	/// Constructs a new Dojo obejct.
-	Dojo(this.game) {
+	/// Constructs a new Background obejct.
+	Background(this.game) {
 		bgSprite = Sprite('background/dojo-no-tray.png'); // set the sprite
 		bgRect = Rect.fromCenter(
 			center: game.screenSize.center(Offset.zero), // center of screen
