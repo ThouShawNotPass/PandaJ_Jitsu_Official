@@ -22,7 +22,7 @@ class Background {
   	Rect bgRect;
 
 	/// The background Sprite asset.
-	Sprite bgSprite = Sprite('background/dojo-no-tray.png');
+	Sprite bgSprite = Sprite('background/dojo.png');
 
 	/// Constructs a new Background obejct.
 	Background(this.game) {

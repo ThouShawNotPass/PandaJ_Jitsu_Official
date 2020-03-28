@@ -20,9 +20,7 @@ void main() async {
 	// Load all assets (cached in a static variable in Flame to reuse later)
 	Flame.images.loadAll(<String>[
 		'background/dojo.png',
-		'background/dojo-no-tray.png',
 		'background/frame.png',
-		'background/frame-with-tray.png',
 		'background/tray.png',
 		'background/help.png',
 		'belts/white-belt.png',
