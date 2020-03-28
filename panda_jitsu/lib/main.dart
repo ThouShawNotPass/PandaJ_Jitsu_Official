@@ -46,20 +46,32 @@ void main() async {
 		'modals/legend.png',
 
 		// CARDS
-		'cards/back-side.png',
-		'cards/blue-card.png',
-		'cards/fire-card.png', // Note: Consider removing (depreciated)
-		'cards/fire.png',
-		'cards/green-card.png',
-		'cards/orange-card.png',
-		'cards/purple-card.png',
-		'cards/red-card.png',
-		'cards/sensei-back.png',
-		'cards/snow-card.png', // Note: Consider removing (depreciated)
-		'cards/snow.png',
-		'cards/water-card.png', // Note: Consider removing (depreciated)
-		'cards/water.png',
-		'cards/yellow-card.png',
+		'cards/base/back-side.png',
+		'cards/base/fire-card.png',
+		'cards/base/sensei-back.png',
+		'cards/base/snow-card.png',
+		'cards/base/water-card.png',
+		'cards/elements/fire.png',
+		'cards/elements/snow.png',
+		'cards/elements/water.png',
+		'cards/levels/1.png',
+		'cards/levels/2.png',
+		'cards/levels/3.png',
+		'cards/levels/4.png',
+		'cards/levels/5.png',
+		'cards/levels/6.png',
+		'cards/levels/7.png',
+		'cards/levels/8.png',
+		'cards/levels/9.png',
+		'cards/levels/10.png',
+		'cards/levels/11.png',
+		'cards/levels/12.png',
+		'cards/overlay/blue-card.png',
+		'cards/overlay/green-card.png',
+		'cards/overlay/orange-card.png',
+		'cards/overlay/purple-card.png',
+		'cards/overlay/red-card.png',
+		'cards/overlay/yellow-card.png'
 	]);
 
 	// Create a new instance of the game object

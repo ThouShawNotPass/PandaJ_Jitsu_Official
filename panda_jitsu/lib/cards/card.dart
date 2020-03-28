@@ -31,6 +31,9 @@ class Card {
 	/// The speed cards travel between frames (tiles per second).
 	static const int speed = 10;
 
+	/// The shrinkage factor of the upper-left card Sprites.
+	static const double shrinkFactor = 0.2;
+
 
 	/// A reference to the Jitsu game.
 	final JitsuGame game;
@@ -42,7 +45,13 @@ class Card {
 	Rect shape;
 
 	/// The image and styling of the card.
-	Sprite style;
+	Sprite style = Sprite('cards/base/back-side.png');
+
+	/// The card's overlay sprite.
+	Sprite overlay = Sprite('cards/overlay/blue-card.png');
+
+	/// The card's element symbol.
+	Sprite element = Sprite('cards/elements/fire.png');
 
 	/// The position of the card's target location.
 	Position targetLocation;
@@ -88,20 +97,20 @@ class Card {
 		if (isFaceUp) {
 			switch (type) {
 				case Element.fire:
-					setStyle(Sprite('cards/fire-card.png'));
+					setStyle(Sprite('cards/base/fire-card.png'));
 					break;
 				case Element.water:
-					setStyle(Sprite('cards/water-card.png'));
+					setStyle(Sprite('cards/base/water-card.png'));
 					break;
 				case Element.snow:
-					setStyle(Sprite('cards/snow-card.png'));
+					setStyle(Sprite('cards/base/snow-card.png'));
 					break;
 				default: // called if type is null
-					setStyle(Sprite('cards/back-side.png'));
+					setStyle(Sprite('cards/base/back-side.png'));
 					break;
 			}
 		} else {
-			setStyle(Sprite('cards/back-side.png'));
+			setStyle(Sprite('cards/base/back-side.png'));
 		}
 	}
 
@@ -146,8 +155,21 @@ class Card {
 	/// Sets the target size of the current card.
 	void setTargetSize(Size newSize) => targetSize = newSize;
 
-	/// Draws the current shape to the given canvas.
-	void render(Canvas c) => style.renderRect(c, shape);
+	/// Draws the current card to the canvas.
+	/// 
+	/// Each card is composed of four different assets. The 'base' layer, which is typically the background image. The 'overlay' which is a random color. 
+	void render(Canvas c) {
+		style.renderRect(c, shape);
+		if (isFaceUp) {
+			overlay.renderRect(c, shape);
+			element.renderRect(c, Rect.fromLTWH(
+				shape.left, 
+				shape.top, 
+				shape.width * shrinkFactor, 
+				shape.width * shrinkFactor
+			));
+		}
+	}
 
 	/// Animates a card-flip action.
 	/// 

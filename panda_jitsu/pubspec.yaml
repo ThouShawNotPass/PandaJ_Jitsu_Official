@@ -35,6 +35,7 @@ flutter:
    - assets/images/background/frame.png
    - assets/images/background/help.png
    - assets/images/background/tray.png
+
    - assets/images/belts/white-belt.png
    - assets/images/belts/yellow-belt.png
    - assets/images/belts/orange-belt.png
@@ -44,25 +45,40 @@ flutter:
    - assets/images/belts/purple-belt.png
    - assets/images/belts/brown-belt.png
    - assets/images/belts/black-belt.png
+
    - assets/images/branding/logo-beige.png
    - assets/images/branding/logo-orange.png
    - assets/images/branding/logo-white.png
+
    - assets/images/modals/instructions.png
    - assets/images/modals/legend.png
-   - assets/images/cards/back-side.png
-   - assets/images/cards/blue-card.png
-   - assets/images/cards/fire-card.png # Note: Consider removing (depreciated)
-   - assets/images/cards/fire.png
-   - assets/images/cards/green-card.png
-   - assets/images/cards/orange-card.png
-   - assets/images/cards/purple-card.png
-   - assets/images/cards/red-card.png
-   - assets/images/cards/sensei-back.png
-   - assets/images/cards/snow-card.png # Note: Consider removing (depreciated)
-   - assets/images/cards/snow.png
-   - assets/images/cards/water-card.png # Note: Consider removing (depreciated)
-   - assets/images/cards/water.png
-   - assets/images/cards/yellow-card.png
+
+   - assets/images/cards/base/back-side.png
+   - assets/images/cards/base/fire-card.png
+   - assets/images/cards/base/sensei-back.png
+   - assets/images/cards/base/snow-card.png
+   - assets/images/cards/base/water-card.png
+   - assets/images/cards/elements/fire.png
+   - assets/images/cards/elements/snow.png
+   - assets/images/cards/elements/water.png
+   - assets/images/cards/levels/1.png
+   - assets/images/cards/levels/2.png
+   - assets/images/cards/levels/3.png
+   - assets/images/cards/levels/4.png
+   - assets/images/cards/levels/5.png
+   - assets/images/cards/levels/6.png
+   - assets/images/cards/levels/7.png
+   - assets/images/cards/levels/8.png
+   - assets/images/cards/levels/9.png
+   - assets/images/cards/levels/10.png
+   - assets/images/cards/levels/11.png
+   - assets/images/cards/levels/12.png
+   - assets/images/cards/overlay/blue-card.png
+   - assets/images/cards/overlay/green-card.png
+   - assets/images/cards/overlay/orange-card.png
+   - assets/images/cards/overlay/purple-card.png
+   - assets/images/cards/overlay/red-card.png
+   - assets/images/cards/overlay/yellow-card.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
