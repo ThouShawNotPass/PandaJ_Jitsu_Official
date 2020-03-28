@@ -7,11 +7,8 @@ import 'package:panda_jitsu/jitsu_game.dart';
 
 
 // The Deck class handles a list of cards but abstracts away many of the list components, exposing only the queue-like structures. It is implemented as a list because the list class has a built-in shuffle() function. 
-// ? Can this be implemented as a Queue<Card> rather than List<Card>?
 
 class Deck {
-
-	static const playerOnLeft = false; // which side the player should go on
 
 	final JitsuGame game; // reference to the game logic
 
@@ -30,7 +27,7 @@ class Deck {
 		);
 		double width = game.tileSize * 1.4;
 		cardSize = Size(width, width * 1.2);
-		alignLeft = playerOnLeft;
+		alignLeft = game.isPlayerOnLeft();
 		isMine = true; // my deck
 	}
 
@@ -43,7 +40,7 @@ class Deck {
 		);
 		double width = game.tileSize * 0.70;
 		cardSize = Size(width, width * 1.2);
-		alignLeft = !playerOnLeft;
+		alignLeft = !game.isPlayerOnLeft();
 		isMine = false; // their deck
 	}
 

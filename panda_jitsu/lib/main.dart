@@ -7,16 +7,17 @@ import 'package:flutter/services.dart';
 
 import 'package:panda_jitsu/jitsu_game.dart';
 
+/// The initial method to run the app.
 void main() async {
-	// This is the glue that binds the framework to the Flutter engine.
+	// This is 'the glue that binds the framework to the Flutter engine'.
 	WidgetsFlutterBinding.ensureInitialized();
 
-	// make full screen and portrait mode (lock)
+	// Make full screen and portrait mode (lock)
 	Util flameUtil = Util();
 	await flameUtil.fullScreen();
 	await flameUtil.setOrientation(DeviceOrientation.landscapeRight);
 
-	// load all assets (cached in a static variable in Flame to reuse later)
+	// Load all assets (cached in a static variable in Flame to reuse later)
 	Flame.images.loadAll(<String>[
 		'background/dojo.png',
 		'background/dojo-no-tray.png',
@@ -40,11 +41,11 @@ void main() async {
 		'modals/legend.png'
 	]);
 
-	// create a new instance of the game object
+	// Create a new instance of the game object
 	JitsuGame game = JitsuGame();
 	runApp(game.widget);
 
-	// create a gesture recogniser and pass it to game object
+	// Create a gesture recogniser and pass it to game object
 	TapGestureRecognizer tapper = TapGestureRecognizer();
 	tapper.onTapDown = game.onTapDown;
 	flameUtil.addGestureRecognizer(tapper);

@@ -4,6 +4,7 @@ import 'package:flame/sprite.dart';
 
 import 'package:panda_jitsu/jitsu_game.dart';
 
+/// 
 // This is the frame the outlines the dojo background, including the card tray.
 // Note: Most mobile devices have a screen width of 9:12-18.5 so our bg is 9:23.
 class Frame {

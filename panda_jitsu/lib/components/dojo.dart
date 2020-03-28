@@ -4,30 +4,38 @@ import 'package:flame/sprite.dart';
 
 import 'package:panda_jitsu/jitsu_game.dart';
 
-// This is the dojo background class which defines behavior for the background.
-// Note: Most mobile devices have a screen width of 9:12-18.5 so our bg is 9:23.
+/// This is the dojo background class which defines state of the background.
+/// 
+/// ### Screen Size: 
+/// Most mobile devices have a screen ratio somewhere between 12: and 18.5:9 so our bg has a 23:9 ratio and is horizontally centered with the left and right edges cropped off.
 class Dojo {
+
+	/// The image ratio (measured in tiles).
+	static const Size bgRatio = Size(23, 9); 
+
+	/// A reference to the JitsuGame object.
 	final JitsuGame game;
 
+	/// The shape of the entire background.
+	/// 
+	/// Part of this rectangle will be off the screen, and that is okay. Currently this is set for a 9:23 background image (2760:1080px).
   	Rect bgRect;
+
+	/// The background Sprite asset.
 	Sprite bgSprite;
 
+	/// Constructs a new Dojo obejct.
 	Dojo(this.game) {
-		bgSprite = Sprite('background/dojo-no-tray.png');
-		// for a background image 1080:2760px (9:23)
-		bgRect = Rect.fromLTWH(
-			game.screenSize.width / 2 - (game.tileSize * 11.5), // Left: center the image on screen
-			0, // Top: starts on top edge
-			game.tileSize * 23, // width: full width
-			game.screenSize.height // Height: full height
+		bgSprite = Sprite('background/dojo-no-tray.png'); // set the sprite
+		bgRect = Rect.fromCenter(
+			center: game.screenSize.center(Offset.zero), // center of screen
+			width: game.tileSize * bgRatio.width, // width of image
+			height: game.screenSize.height // height of screen
 		);
 	}
 
-	// Draws the background to the screen
+	/// Draws the background to the screen.
 	void render(Canvas c) {
 		bgSprite.renderRect(c, bgRect);
 	}
-
-	// No need to update the background
-	void update(double t) {}
 }

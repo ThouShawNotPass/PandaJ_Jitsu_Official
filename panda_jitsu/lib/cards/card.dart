@@ -15,7 +15,8 @@ import 'package:panda_jitsu/jitsu_game.dart';
 /// The card class is a super class to child element cards and will be a parent to the individual power cards (level ten and up). Each card object can keep track of its own element type (fire, water, snow), its level (currently only one through nine) and whether or not the card should be displayed as "face-up".
 class Card {
 
-	static const int speed = 1;
+	static const int speed = 10;
+	static const double step = 0.2;
 
 	final JitsuGame game;
 	final Deck deck;
@@ -150,37 +151,36 @@ class Card {
 			targetSize.height - shape.height
 		);
 		// Note: we compute the 'distanceSquared' because its faster
-		double step = 0.4;
-			if (toTarget.distanceSquared > 0.1) {
-				setShape(Rect.fromCenter(
-					center: shape.center,
-					width: shape.width + step * toTarget.dx,
-					height: shape.height + step * toTarget.dy
-				));
-			} else {
-				setShape(Rect.fromCenter(
-					center: shape.center,
-					width: targetSize.width,
-					height: targetSize.height
-				));
-				// flip card if either width or height are zero
-				if  (shape.width == 0 || shape.height == 0) {
-					_toggleFaceUp();
-					_updateSprite();
-					// return card to original form factor
-					if (shape.width == 0) {
-						setTargetSize(Size(
-							0.833333 * shape.height, 
-							shape.height
-						));
-					} else { // shape.height == 0
-						setTargetSize(Size(
-							shape.width, 
-							1.2 * shape.width
-						));
-					}
+		if (toTarget.distanceSquared > 0.1) {
+			setShape(Rect.fromCenter(
+				center: shape.center,
+				width: shape.width + step * toTarget.dx,
+				height: shape.height + step * toTarget.dy
+			));
+		} else {
+			setShape(Rect.fromCenter(
+				center: shape.center,
+				width: targetSize.width,
+				height: targetSize.height
+			));
+			// flip card if either width or height are zero
+			if  (shape.width == 0 || shape.height == 0) {
+				_toggleFaceUp();
+				_updateSprite();
+				// return card to original form factor
+				if (shape.width == 0) {
+					setTargetSize(Size(
+						0.833333 * shape.height, 
+						shape.height
+					));
+				} else { // shape.height == 0
+					setTargetSize(Size(
+						shape.width, 
+						1.2 * shape.width
+					));
 				}
 			}
+		}
 	}
 
 	// Tries to take a small step toward the targetLocation if it needs to

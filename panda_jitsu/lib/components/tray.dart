@@ -13,42 +13,77 @@ import 'package:panda_jitsu/jitsu_game.dart';
 
 // This class will handle the bottom part of the screen, including where cards should be diverted and keeps track of empty mySlots as cards are selected.
 class Tray {
+	/// The padding factor between cards in the tray.
+	/// 
+	/// This padding has a default value of 1.2.
+	static const double paddingFactor = 1.2;
 
-	static const double paddingFactor = 1.2; // padding between cards
+	/// The configuration of the text on screen.
 	static const TextConfig config = TextConfig(
 		color: Color(0xFF000000),
 		fontSize: 20.0, 
 		fontFamily: 'Julee'
-	); // configures a text feature
+	);
 
+
+	/// The player's deck of cards.
 	final Deck myDeck;
+
+	/// The opponent's deck of cards.
 	final Deck comDeck;
+
+	/// The players number of card slots available.
 	final int mySize;
+
+	/// The opponent's number of card slots available.
 	final int comSize;
+
+	/// A reference to the JitsuGame object.
 	final JitsuGame game;
 
-	Card comPot; // their card in the middle
-	Card myPot; // my card in the middle
-	bool hasBeenFlipped;
+	// The opponent's middle 'pot' card.
+	Card comPot;
+
+	/// The player's middle 'pot' card.
+	Card myPot;
+
+	/// Whether the opponent's pot card has been flipped.
+	/// 
+	/// This boolean defaults to a value of false.
+	bool hasBeenFlipped = false; 
+
+	/// A list of cards in the opponent's hand.
 	List<Card> comSlots;
+
+	/// A list of cards in the player's hand.
 	List<Card> mySlots;
-	Offset trayPos; // top left of the tray
-	Random rand = Random();
-  	Rect trayArea; // rectangular area of the tray
+
+	/// The top left position of the tray.
+	Offset trayPos; // REVIEW: Consider making this a Position class.
+
+	/// The rectangular area of the tray.
+  	Rect trayArea;
+
+	/// The opponent's username.
 	String comName;
+
+	/// The player's username.
 	String myName;
-	Sprite traySprite; // tray image (png)
+
+	/// The sprite image used as the tray background.
+	/// 
+	/// This asset is currently located at background/tray.png
+	Sprite traySprite = Sprite('background/tray.png');
 	
+	/// Constructs a new Tray object.
 	Tray(this.game, this.myDeck, this.mySize, this.comDeck, this.comSize) {
-		hasBeenFlipped = false;
 		comSlots = List<Card>(comSize);
 		mySlots = List<Card>(mySize);
-		traySprite = Sprite('background/tray.png');
-		trayPos = Offset(game.tileSize * 1, game.tileSize * 6.25); // TODO: convert stray numbers to static const values
+		trayPos = Offset(game.tileSize * 1, game.tileSize * 6.25);
 		trayArea = Rect.fromLTWH(
 			trayPos.dx,
 			trayPos.dy,
-			game.screenSize.width - trayPos.dx * 2, // TODO: scale tray based on width including numerical padding adjustments
+			game.screenSize.width - trayPos.dx * 2,
 			game.screenSize.height - trayPos.dy
 		);
 		comName = "GRASSHOPPER";
@@ -155,7 +190,7 @@ class Tray {
 			if (_slotHasLoaded(mySlots)) {
 				mySlots.forEach((Card card) {
 					if (card.contains(touchPoint)) {
-						int i = rand.nextInt(comSize);
+						int i = game.rand.nextInt(comSize);
 						Card comCard = comSlots.elementAt(i);
 						comPot = comCard;
 						comCard.sendToPot();
