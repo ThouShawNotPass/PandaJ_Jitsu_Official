@@ -19,10 +19,13 @@ void main() async {
 
 	// Load all assets (cached in a static variable in Flame to reuse later)
 	Flame.images.loadAll(<String>[
+		// BACKGROUNDS
 		'background/dojo.png',
 		'background/frame.png',
 		'background/tray.png',
 		'background/help.png',
+
+		// BELTS
 		'belts/white-belt.png',
 		'belts/yellow-belt.png',
 		'belts/orange-belt.png',
@@ -32,23 +35,29 @@ void main() async {
 		'belts/purple-belt.png',
 		'belts/brown-belt.png',
 		'belts/black-belt.png',
+
+		// BRANDING
 		'branding/logo-beige.png',
 		'branding/logo-orange.png',
 		'branding/logo-white.png',
+
+		// MODALS
 		'modals/instructions.png',
 		'modals/legend.png',
+
+		// CARDS
 		'cards/back-side.png',
 		'cards/blue-card.png',
-		'cards/fire-card.png',
+		'cards/fire-card.png', // Note: Consider removing (depreciated)
 		'cards/fire.png',
 		'cards/green-card.png',
 		'cards/orange-card.png',
 		'cards/purple-card.png',
 		'cards/red-card.png',
 		'cards/sensei-back.png',
-		'cards/snow-card.png',
+		'cards/snow-card.png', // Note: Consider removing (depreciated)
 		'cards/snow.png',
-		'cards/water-card.png',
+		'cards/water-card.png', // Note: Consider removing (depreciated)
 		'cards/water.png',
 		'cards/yellow-card.png',
 	]);
