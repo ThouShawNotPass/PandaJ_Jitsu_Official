@@ -14,10 +14,19 @@ import 'package:panda_jitsu/jitsu_game.dart';
 /// 
 /// This class will handle the bottom part of the screen, including where cards should be diverted and keeps track of empty mySlots as cards are selected.
 class Tray {
+
 	/// The padding factor between cards in the tray.
 	/// 
 	/// This padding has a default value of 1.2.
-	static const double paddingFactor = 1.2;
+	static const double cardPadding = 1.2;
+
+	/// The padding between the edges of the screen and the tray position (measured in tiles).
+	/// 
+	/// The trayPadding has a default value of 1 tile from the left edge and 6.25 tiles from the top.
+	static const Offset trayPadding = Offset(1, 6.25);
+
+	/// Number of pixels to shift per character.
+	static const double pixelsPerCharacter = 11.0;
 
 	/// The configuration of the text on screen.
 	static const TextConfig config = TextConfig(
@@ -60,7 +69,7 @@ class Tray {
 	List<Card> mySlots;
 
 	/// The top left position of the tray.
-	Offset trayPos; // REVIEW: Consider making this a Position class.
+	Position trayPos;
 
 	/// The rectangular area of the tray.
   	Rect trayArea;
@@ -80,12 +89,15 @@ class Tray {
 	Tray(this.game, this.myDeck, this.mySize, this.comDeck, this.comSize) {
 		comSlots = List<Card>(comSize);
 		mySlots = List<Card>(mySize);
-		trayPos = Offset(game.tileSize * 1, game.tileSize * 6.25);
+		trayPos = Position(
+			game.tileSize * trayPadding.dx, // padding from left edge
+			game.tileSize * trayPadding.dy // padding from top edge
+		);
 		trayArea = Rect.fromLTWH(
-			trayPos.dx,
-			trayPos.dy,
-			game.screenSize.width - trayPos.dx * 2,
-			game.screenSize.height - trayPos.dy
+			trayPos.x,
+			trayPos.y,
+			game.screenSize.width - trayPos.x * 2, // equal padding left/right
+			game.screenSize.height - trayPos.y // extend to bottom of screen
 		);
 		comName = "GRASSHOPPER";
 		myName = "SENSEI";
@@ -108,24 +120,28 @@ class Tray {
 		return myCardReady && comCardReady;
 	}
 
-	// Renders the players names based on which side their deck is on
+	/// Renders the right name to each side
+	void _renderNames(Canvas c, Position right, Position left,
+						  String leftName, String rightName) {
+		right.x -= pixelsPerCharacter * rightName.length;
+		config.render(c, leftName, left);
+		config.render(c, rightName, right);
+	}
+
+	/// Renders the players names based on which side their deck is on.
 	void renderNames(Deck deck, Canvas c) {
-		Position left = Position(trayPos.dx + 25, trayPos.dy + 15);
-		Position right = Position(game.screenSize.width - trayPos.dx - 25, trayPos.dy + 15);
+		Position left = trayPos.add(Position(25, 15));
+		Position right = Position(game.screenSize.width - trayPos.x - 25, trayPos.y + 15);
 		
 		if (deck.alignLeft) {
-			right.x -= 11 * comName.length;
-			config.render(c, myName, left);
-			config.render(c, comName, right);
+			_renderNames(c, right, left, myName, comName);
 		} else {
-			right.x -= 11 * myName.length;
-			config.render(c, comName, left);
-			config.render(c, myName, right);
+			_renderNames(c, right, left, comName, myName);
 		}
 		
 	}
 
-	// Renders the given list of cards and given pot card to the canvas.
+	/// Renders the given list of cards and given pot card to the canvas.
 	void renderCards(List<Card> slot, Card pot, Canvas c) {
 		if (_slotHasLoaded(slot)) {
 			slot.forEach((Card card) => card.render(c)); // draw each card 
@@ -135,19 +151,18 @@ class Tray {
 		}
 	}
 
-	// Finds and returns the coordinate of the deck at the given position.
+	/// Finds and returns the coordinate of the deck at the given position.
 	Position getSlotPositionFromIndex(int i, Deck deck) {
-		double fromLeftEdge = 30 + trayPos.dx + (paddingFactor * deck.cardSize.width * i);
-		double fromTopEdge = 25 + trayPos.dy + 15;
-		if (deck.alignLeft) {
-			return Position(fromLeftEdge, fromTopEdge);
-		} else {
+		double fromLeftEdge = 30 + trayPos.x + (cardPadding * deck.cardSize.width * i);
+		double fromTopEdge = 40 + trayPos.y;
+		if (!deck.alignLeft) {
 			fromLeftEdge += deck.cardSize.width;
-			return Position(game.screenSize.width - fromLeftEdge, fromTopEdge);
+			fromLeftEdge = game.screenSize.width - fromLeftEdge;
 		}
+		return Position(fromLeftEdge, fromTopEdge);
 	}
 
-	// Updates the given list of cards and given pot card to the canvas.
+	/// Updates the given list of cards and given pot card to the canvas.
 	void updateCards(List<Card> slot, int size, Deck deck, Card pot, double t) {
 		if (_slotHasLoaded(slot)) { // check the the slot
 			for (int i = 0; i < size; i++) { // loop through each slots
@@ -168,7 +183,7 @@ class Tray {
 		}
 	}
 
-	// Renders the tray (and its components) to the canvas
+	/// Renders the tray (and its components) to the canvas
 	void render(Canvas c) {
 		traySprite.renderRect(c, trayArea); // render tray background
 		renderCards(comSlots, comPot, c); // render opponents cards
@@ -176,7 +191,9 @@ class Tray {
 		renderNames(myDeck, c);
 	}
 
-	// Loops through the five mySlots and makes sure they are all full. If not, it will draw the next card from the deck to fill the open slot.
+	/// Updates the tray.
+	/// 
+	/// Loops through the five mySlots and makes sure they are all full. If not, it will draw the next card from the deck to fill the open slot.
 	void update(double t) {
 		updateCards(mySlots, mySize, myDeck, myPot, t);
 		updateCards(comSlots, comSize, comDeck, comPot, t);
@@ -186,6 +203,7 @@ class Tray {
 		}
 	}
 
+	/// Handles user taps.
 	void handleTouchAt(Offset touchPoint) {
 		if (_potIsEmpty()) {
 			if (_slotHasLoaded(mySlots)) {

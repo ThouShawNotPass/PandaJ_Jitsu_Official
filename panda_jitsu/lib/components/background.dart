@@ -22,11 +22,10 @@ class Background {
   	Rect bgRect;
 
 	/// The background Sprite asset.
-	Sprite bgSprite;
+	Sprite bgSprite = Sprite('background/dojo-no-tray.png');
 
 	/// Constructs a new Background obejct.
 	Background(this.game) {
-		bgSprite = Sprite('background/dojo-no-tray.png'); // set the sprite
 		bgRect = Rect.fromCenter(
 			center: game.screenSize.center(Offset.zero), // center of screen
 			width: game.tileSize * bgRatio.width, // width of image
