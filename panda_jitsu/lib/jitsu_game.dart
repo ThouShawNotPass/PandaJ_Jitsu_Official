@@ -18,7 +18,7 @@ import 'package:panda_jitsu/element.dart'; // the element
 class JitsuGame extends Game {
 
 	/// Which side the player should go on.
-	static const playerOnLeft = false;
+	static const playerOnLeft = true;
 
 	/// The number of vertical sections the screen is split into.
 	static const double verticalSections = 9;

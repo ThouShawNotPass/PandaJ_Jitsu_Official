@@ -232,16 +232,16 @@ class Card {
 			} else {
 				inflateByFactor(2 * inflationFactor); // double for small cards
 			}
-
+			Position centerScreen = deck.screenCenter.clone();
 			if (deck.alignLeft) {
 				setTargetLocation(
-					deck.screenCenter.minus( // shift left and up from center
+					centerScreen.minus( // shift left and up from center
 						Position(2 * shape.width, shape.height / 2)
 					)
 				);
 			} else {
 				setTargetLocation(
-					deck.screenCenter.add( // shift right and up from center
+					centerScreen.add( // shift right and up from center
 						Position(shape.width, -1 * shape.height / 2)
 					)
 				);

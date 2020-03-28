@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/anchor.dart';
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/text_config.dart';
@@ -20,18 +21,26 @@ class Tray {
 	/// This padding has a default value of 1.2.
 	static const double cardPadding = 1.2;
 
+	/// The padding between the tray and ths card slot (measured in tiles).
+	static const Offset slotPadding = Offset(0.70, 0.43);
+
+	/// The size of the text.
+	/// 
+	/// Default: 20.0
+	static const double textSize = 20.0;
+
 	/// The padding between the edges of the screen and the tray position (measured in tiles).
 	/// 
 	/// The trayPadding has a default value of 1 tile from the left edge and 6.25 tiles from the top.
 	static const Offset trayPadding = Offset(1, 6.25);
 
-	/// Number of pixels to shift per character.
-	static const double pixelsPerCharacter = 11.0;
+	/// The padding between the tray and textArea (measured in tiles).
+	static const Offset textPadding = Offset(0.70, 0.35);
 
 	/// The configuration of the text on screen.
 	static const TextConfig config = TextConfig(
 		color: Color(0xFF000000),
-		fontSize: 20.0, 
+		fontSize: textSize, 
 		fontFamily: 'Julee'
 	);
 
@@ -122,16 +131,21 @@ class Tray {
 
 	/// Renders the right name to each side
 	void _renderNames(Canvas c, Position right, Position left,
-						  String leftName, String rightName) {
-		right.x -= pixelsPerCharacter * rightName.length;
-		config.render(c, leftName, left);
-		config.render(c, rightName, right);
+					  String leftName, String rightName) {
+		config.render(c, leftName, left, anchor: Anchor.topLeft);
+		config.render(c, rightName, right, anchor: Anchor.topRight);
 	}
 
 	/// Renders the players names based on which side their deck is on.
 	void renderNames(Deck deck, Canvas c) {
-		Position left = trayPos.add(Position(25, 15));
-		Position right = Position(game.screenSize.width - trayPos.x - 25, trayPos.y + 15);
+		Position left = Position(
+			trayPos.x + game.tileSize * textPadding.dx, 
+			trayPos.y + game.tileSize * textPadding.dy
+		);
+		Position right = Position(
+			game.screenSize.width - left.x, 
+			left.y
+		);
 		
 		if (deck.alignLeft) {
 			_renderNames(c, right, left, myName, comName);
@@ -153,8 +167,8 @@ class Tray {
 
 	/// Finds and returns the coordinate of the deck at the given position.
 	Position getSlotPositionFromIndex(int i, Deck deck) {
-		double fromLeftEdge = 30 + trayPos.x + (cardPadding * deck.cardSize.width * i);
-		double fromTopEdge = 40 + trayPos.y;
+		double fromLeftEdge = trayPos.x + (game.tileSize * slotPadding.dx) + (cardPadding * deck.cardSize.width * i);
+		double fromTopEdge = textSize + trayPos.y + (game.tileSize * slotPadding.dy);
 		if (!deck.alignLeft) {
 			fromLeftEdge += deck.cardSize.width;
 			fromLeftEdge = game.screenSize.width - fromLeftEdge;
