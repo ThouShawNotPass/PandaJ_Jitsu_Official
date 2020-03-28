@@ -264,6 +264,7 @@ class Card {
 			if  (shape.width == 0 || shape.height == 0) {
 				_toggleFaceUp();
 				_updateSprite();
+
 				// return card to original form factor
 				if (shape.width == 0) {
 					setTargetSize(Size(
