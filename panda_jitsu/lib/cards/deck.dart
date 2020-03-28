@@ -1,4 +1,4 @@
-import 'dart:ui'; // for basic dart objects (Rect, Paint, Canvas)
+import 'dart:ui';
 
 import 'package:flame/position.dart';
 
@@ -6,19 +6,33 @@ import 'package:panda_jitsu/cards/card.dart';
 import 'package:panda_jitsu/jitsu_game.dart';
 
 
-// The Deck class handles a list of cards but abstracts away many of the list components, exposing only the queue-like structures. It is implemented as a list because the list class has a built-in shuffle() function. 
-
+/// A deck of cards.
+/// 
+/// Abstracts away many of the list components, exposing only the queue-like structures. It is implemented as a list because the list class has a built-in shuffle() function.
 class Deck {
 
-	final JitsuGame game; // reference to the game logic
+	/// A reference to the game logic.
+	final JitsuGame game;
 
-	bool alignLeft; // true if deck is on the left side
-	bool isMine; // true if my card, false if theirs
-	List<Card> cards; // private queue-like data structure
+
+	/// True if the deck is on the left side, false otherwise.
+	bool alignLeft;
+
+	/// True is card is owned by the player, false otherwise.
+	bool isMine;
+
+	/// Queue-like deck structure to keep track of the cards.
+	List<Card> cards;
+
+	/// The center of the device's screen.
 	Position screenCenter;
+
+	/// The size of a basic card.
+	/// 
+	/// Note: This size might end up changing based on the deck.
 	Size cardSize;
 
-	// Constructor - initialize a reference to the game
+	/// Constructs a new deck object for the player.
 	Deck(this.game) {
 		cards = List<Card>();
 		screenCenter = Position(
@@ -31,7 +45,7 @@ class Deck {
 		isMine = true; // my deck
 	}
 
-	// Constructor - initialize a reference to the game
+	/// Constructs a new deck object for the opponent.
 	Deck.opponent(this.game) {
 		cards = List<Card>();
 		screenCenter = Position(
@@ -44,22 +58,26 @@ class Deck {
 		isMine = false; // their deck
 	}
 
-	// Randomizes the order of the deck (shuffling the cards)
+	/// Randomizes the order of the deck.
 	void shuffle() => cards.shuffle();
 
-	// Return true if the deck contains no cards.
+	/// Returns true if the deck contains no cards.
 	bool isEmpty() => cards.isEmpty;
 
-	// Returns true if the deck is owned by the player
+	/// Returns true if the deck is owned by the player.
 	bool isMyCard() => isMine;
 
 	/// Returns the number of cards in the deck.
 	int size() => cards.length;
 
-	// Removes and returns the first Card in the deck. This method will return null if the deck is empty.
+	/// Removes and returns the first Card in the deck. 
+	/// 
+	/// Note: This method will throw a FormatException if the deck is empty.
 	Card draw() {
 		Card result;
-		if (cards.isNotEmpty) {
+		if (cards.isEmpty) {
+			throw new FormatException('The deck was empty!');
+		} else {
 			result = cards.removeAt(0);
 		}
 		return result;
