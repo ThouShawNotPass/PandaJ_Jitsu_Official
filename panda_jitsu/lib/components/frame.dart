@@ -18,11 +18,10 @@ class Frame {
 	Rect frameRect;
 
 	/// The Sprite asset of the frame.
-	Sprite frameSprite;
+	Sprite frameSprite = Sprite('background/frame.png');
 
 	/// Constructs a new Frame object.
 	Frame(this.game) {
-		frameSprite = Sprite('background/frame.png');
 		frameRect = Offset.zero & game.screenSize;
 		// same as Rect(0, 0, game.screenSize.width, game.screenSize.height)
 	}
