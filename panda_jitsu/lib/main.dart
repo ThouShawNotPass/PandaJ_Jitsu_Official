@@ -38,7 +38,21 @@ void main() async {
 		'branding/logo-orange.png',
 		'branding/logo-white.png',
 		'modals/instructions.png',
-		'modals/legend.png'
+		'modals/legend.png',
+		'cards/back-side.png',
+		'cards/blue-card.png',
+		'cards/fire-card.png',
+		'cards/fire.png',
+		'cards/green-card.png',
+		'cards/orange-card.png',
+		'cards/purple-card.png',
+		'cards/red-card.png',
+		'cards/sensei-back.png',
+		'cards/snow-card.png',
+		'cards/snow.png',
+		'cards/water-card.png',
+		'cards/water.png',
+		'cards/yellow-card.png',
 	]);
 
 	// Create a new instance of the game object
