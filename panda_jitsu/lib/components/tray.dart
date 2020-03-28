@@ -10,7 +10,9 @@ import 'package:panda_jitsu/cards/deck.dart';
 import 'package:panda_jitsu/card_status.dart';
 import 'package:panda_jitsu/jitsu_game.dart';
 
-// This class will handle the bottom part of the screen, including where cards should be diverted and keeps track of empty mySlots as cards are selected.
+/// The card container on bottom of screen.
+/// 
+/// This class will handle the bottom part of the screen, including where cards should be diverted and keeps track of empty mySlots as cards are selected.
 class Tray {
 	/// The padding factor between cards in the tray.
 	/// 

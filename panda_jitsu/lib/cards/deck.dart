@@ -79,6 +79,12 @@ class Deck {
 	/// Returns the number of cards in the deck.
 	int size() => cards.length;
 
+	/// Returns the card ratio.
+	double getCardRatio() => cardRatio;
+
+	/// Returns the inverse of the card ratio.
+	double getInverseCardRatio() => 1 / cardRatio;
+
 	/// Removes and returns the first Card in the deck. 
 	/// 
 	/// Note: This method will throw a FormatException if the deck is empty.

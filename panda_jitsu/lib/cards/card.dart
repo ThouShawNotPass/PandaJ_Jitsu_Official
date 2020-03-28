@@ -1,12 +1,12 @@
-import 'dart:ui'; // for basic dart objects (Rect, Paint, Canvas)
+import 'dart:ui';
 
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/gestures.dart'; // handles taps
+import 'package:flutter/gestures.dart';
 
-import 'package:panda_jitsu/cards/deck.dart'; // deck of cards
-import 'package:panda_jitsu/card_status.dart'; // status enum to describe the current status of the card (inDeck, inHand, inPot)
-import 'package:panda_jitsu/element.dart'; // element enum (fire, water, snow)
+import 'package:panda_jitsu/cards/deck.dart';
+import 'package:panda_jitsu/card_status.dart';
+import 'package:panda_jitsu/element.dart';
 import 'package:panda_jitsu/jitsu_game.dart';
 
 
@@ -15,48 +15,74 @@ import 'package:panda_jitsu/jitsu_game.dart';
 /// The card class is a super class to child element cards and will be a parent to the individual power cards (level ten and up). Each card object can keep track of its own element type (fire, water, snow), its level (currently only one through nine) and whether or not the card should be displayed as "face-up".
 class Card {
 
-	static const int speed = 10;
-	static const double step = 0.2;
+	/// The factor by which to inflate the card in the pot.
+	/// 
+	/// The inflation factor is for the player's card and should be doubled for the smaller opponents card. Typically their card is smaller than the player's by a factor of 2.
+	static const double inflationFactor = 1.5;
 
+	/// The minimum distance between two positions that counts as 'equal'.
+	/// 
+	/// This solves a small overflow bug where the calculated distance is actually slightly greater than zero (~10^-27) when it should be zero.
+	static const double minDistSquared = 0.1;
+
+	/// The maximum size step distance between frames.
+	static const double sizeStep = 0.2;
+
+	/// The speed cards travel between frames (tiles per second).
+	static const int speed = 10;
+
+
+	/// A reference to the Jitsu game.
 	final JitsuGame game;
+
+	/// A reference to the card's deck.
 	final Deck deck;
 
-	Rect shape; // the rectangular shape of the card (3:4 ratio)
-	Sprite style; // image and styling of the card
-	Position targetLocation; // where the card is trying to go
-	Size targetSize; // the shape the card is trying to be in
+	/// The rectangular shape of the card.
+	Rect shape;
 
-	Element type; // fire, water, snow
-	int level; // numbert between 1 and 9 (for now)
-    bool isFaceUp; // which side of the card should we show
-    CardStatus status; // which side of the card should we show
+	/// The image and styling of the card.
+	Sprite style;
+
+	/// The position of the card's target location.
+	Position targetLocation;
+
+	/// The size of the card's target shape.
+	Size targetSize;
+
+	/// The card's element.
+	/// 
+	/// See also: [Element]
+	Element type;
+
+	/// The power level of the card. 
+	/// 
+	/// The power level is used to break ties if two cards have the same Element type. This is currently a number between 1 and 9.
+	int level;
+
+	/// True if the card is 'face-up'
+    bool isFaceUp;
+
+	/// The current status of the card.
+	/// 
+	/// See also: [CardStatus]
+    CardStatus status;
 
 	/// Constructs a new card object.
-	Card(this.game, this.deck, Element el, int lvl, bool faceUp) {
-		// centered horizontally and vertically offscreen below the screen
+	Card(this.game, this.deck, this.type, this.level, this.isFaceUp) {
 		setTargetLocation(Position( 
-			(deck.screenCenter.x) - (deck.cardSize.width / 2),
-			(deck.screenCenter.y * 2)
+			(deck.screenCenter.x) - (deck.cardSize.width / 2), // centered
+			(game.screenSize.height) // off the bottom of the screen
 		));
-		setTargetSize(Size(
-			deck.cardSize.width, 
-			deck.cardSize.height
-		));
-		setShape(Rect.fromLTWH(
-			targetLocation.x, 
-			targetLocation.y, 
-			targetSize.width, 
-			targetSize.height
-		));
-		isFaceUp = faceUp; // this must come before setColorFromElement()
-		type = el;
-		level = lvl;
+		setTargetSize(deck.cardSize);
+		setShape(targetLocation, targetSize);
 		setCardStatus(CardStatus.inDeck);
 		_updateSprite();
 	}
 
 	/// Determines the color of the card based on the element type. 
 	/// 
+	/// If the Element is null, it will assign the back-side Sprite as if the card has been turned face-down.
 	/// This method relys on the isFaceUp boolean instance variable being defined (it should not be null).
 	void _updateSprite() {
 		if (isFaceUp) {
@@ -81,7 +107,7 @@ class Card {
 
 	/// Inflates the current shape by the given factor.
 	void inflateByFactor(double n) {
-		setShape(Rect.fromLTWH(
+		setShapeFromRect(Rect.fromLTWH(
 			shape.left, 
 			shape.top, 
 			n * shape.width, 
@@ -96,14 +122,17 @@ class Card {
 	/// Returns whether the card is done translating.
 	bool isDoneMoving() {
 		Offset dist = Offset(targetLocation.x - shape.left, targetLocation.y - shape.top);
-		return dist.distanceSquared < 0.001; // Note: solves 10^-27 overflow bug
+		return dist.distanceSquared < minDistSquared; // Solves almost-zero bug
 	}
 
 	/// Toggles the value of isFaceUp
 	void _toggleFaceUp() => isFaceUp = !isFaceUp;
 
 	/// Sets the current shape to the given rectangle.
-	void setShape(Rect newRect) => shape = newRect;
+	void setShapeFromRect(Rect newRect) => shape = newRect;
+
+	/// Sets the current shape based on the given Offset and Size.
+	void setShape(Position p, Size s) => shape = Offset(p.x, p.y) & s;
 
 	/// Sets the style to the given Sprite.
 	void setStyle(Sprite newSprite) => style = newSprite;
@@ -121,23 +150,27 @@ class Card {
 	void render(Canvas c) => style.renderRect(c, shape);
 
 	/// Animates a card-flip action.
-	void flip() {
-		setTargetSize(Size(0, shape.height));
-	}
+	/// 
+	/// This method sets the target size to a width of zero and the same height as before. The actual shape will be changed when render() and update() are called.
+	/// Implementation:
+	/// ```
+	/// setTargetSize(Size(0, shape.height));
+	/// ```
+	void flip() => setTargetSize(Size(0, shape.height));
 
 	/// Updates the position of the card.
 	/// 
-	/// Updates the position of the card by shifting the top, left coordinate by a small step if the translation is large or shifting it directly to the target point if the translation is small
+	/// Updates the position of the card by shifting the top, left coordinate by a small step if the translation is large or shifting it directly to the target point if the translation is small.
 	void _updatePosition(double t) {
 		Offset toTarget = Offset(targetLocation.x, targetLocation.y) - Offset(shape.left, shape.top);
 		// Note: we compute the distanceSquared because its faster
-		if (toTarget.distanceSquared > 0) {
-			double step = game.tileSize * speed * t; // dist card moves
-			if (toTarget.distanceSquared > step * step) { // more than one step to go
+		if (toTarget.distanceSquared > minDistSquared) {
+			double step = game.tileSize * speed * t;
+			if (toTarget.distanceSquared > step * step) {
 				Offset smStep = Offset.fromDirection(toTarget.direction, step);
-				setShape(shape.shift(smStep));
+				setShapeFromRect(shape.shift(smStep));
 			} else { // less than a step to go
-				setShape(shape.shift(toTarget)); // we are there!
+				setShapeFromRect(shape.shift(toTarget)); // we are there!
 			}
 		}
 	}
@@ -150,15 +183,15 @@ class Card {
 			targetSize.width - shape.width, 
 			targetSize.height - shape.height
 		);
-		// Note: we compute the 'distanceSquared' because its faster
-		if (toTarget.distanceSquared > 0.1) {
-			setShape(Rect.fromCenter(
+		// Note: we compute the 'distanceSquared' here because its faster
+		if (toTarget.distanceSquared > minDistSquared) {
+			setShapeFromRect(Rect.fromCenter(
 				center: shape.center,
-				width: shape.width + step * toTarget.dx,
-				height: shape.height + step * toTarget.dy
+				width: shape.width + sizeStep * toTarget.dx,
+				height: shape.height + sizeStep * toTarget.dy
 			));
 		} else {
-			setShape(Rect.fromCenter(
+			setShapeFromRect(Rect.fromCenter(
 				center: shape.center,
 				width: targetSize.width,
 				height: targetSize.height
@@ -170,43 +203,49 @@ class Card {
 				// return card to original form factor
 				if (shape.width == 0) {
 					setTargetSize(Size(
-						0.833333 * shape.height, 
+						shape.height * deck.getInverseCardRatio(), 
 						shape.height
 					));
 				} else { // shape.height == 0
 					setTargetSize(Size(
 						shape.width, 
-						1.2 * shape.width
+						shape.width * deck.getCardRatio()
 					));
 				}
 			}
 		}
 	}
 
-	// Tries to take a small step toward the targetLocation if it needs to
+	/// Updates the current state of the card.
+	/// 
+	/// See also: [_updatePosition] and [_updateSize]
 	void update(double t) {
 		_updatePosition(t);
 		_updateSize(t);
 	}
 
-	/// Sends the current card to the pot.
+	/// Sends the current card to the middle pot.
 	void sendToPot() {
 		if (status == CardStatus.inHand) { // only cards in hand are tappable
-			double n; // inflation factor
 			if (deck.isMyCard()) {
-				n = 1.5; // for regular sized cards
+				inflateByFactor(inflationFactor);
 			} else {
-				n = 3.0; // for the tiny opponent's cards => make same size
+				inflateByFactor(2 * inflationFactor); // double for small cards
 			}
-			inflateByFactor(n);
-			Position newPos = Position( // default left target
-				(deck.screenCenter.x) - (2 * shape.width),
-				(deck.screenCenter.y) - (shape.height / 2)
-			);
-			if (!deck.alignLeft) { // set right target instead
-				newPos = newPos.add(Position(3 * shape.width, 0));
+
+			if (deck.alignLeft) {
+				setTargetLocation(
+					deck.screenCenter.minus( // shift left and up from center
+						Position(2 * shape.width, shape.height / 2)
+					)
+				);
+			} else {
+				setTargetLocation(
+					deck.screenCenter.add( // shift right and up from center
+						Position(shape.width, -1 * shape.height / 2)
+					)
+				);
 			}
-			setTargetLocation(newPos);
 			setCardStatus(CardStatus.inPot);
 		}
 	}
