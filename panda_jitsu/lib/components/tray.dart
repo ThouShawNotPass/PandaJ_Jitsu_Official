@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:io';
 
 import 'package:flame/anchor.dart';
 import 'package:flame/position.dart';
@@ -43,7 +44,6 @@ class Tray {
 		fontSize: textSize, 
 		fontFamily: 'Julee'
 	);
-
 
 	/// The player's deck of cards.
 	final Deck myDeck;
@@ -129,9 +129,16 @@ class Tray {
 		return myCardReady && comCardReady;
 	}
 
+	/// Returns true if the flip animation has finished.
+	/// 
+	/// Note: This method assumes comPot is not null.
+	bool flipHasFinished() {
+		return comPot.isDoneResizing();
+	}
+
 	/// Compares the cards in the pot.
 	void compareCards() {
-		if (bothCardsReady()) {
+		if (bothCardsReady() && flipHasFinished()) {
 			int result = myPot.compareTo(comPot);
 			if (result > 0) {
 				// player won
@@ -143,6 +150,7 @@ class Tray {
 				// tie
 				print('player tied');
 			}
+			sleep(const Duration(seconds:1));
 			myDeck.add(myPot);
 			myPot = null;
 			comDeck.add(comPot);

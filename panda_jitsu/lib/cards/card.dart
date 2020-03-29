@@ -173,6 +173,11 @@ class Card {
 		return dist.distanceSquared < minDistSquared; // Solves almost-zero bug
 	}
 
+	/// Returns true if card shape matches target size
+	bool isDoneResizing() {
+		return targetSize.width == shape.width && targetSize.height == shape.height;
+	}
+
 	/// Compares self to other Card object.
 	/// 
 	/// Returns positive integer if this card beats the other, negative integer if not, and 0 if the two cards are tied.

@@ -12,3 +12,6 @@
 - Display winner and playAgain.
 
 - Start Animations.
+
+# Timelog
+~ 70 hours (as of Sat Mar 28)
