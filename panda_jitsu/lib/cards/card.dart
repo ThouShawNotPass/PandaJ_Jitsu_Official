@@ -88,14 +88,14 @@ class Card {
 		setCardStatus(CardStatus.inDeck);
 		_setRandomOverlay();
 		_setLevelSprite();
-		_updateSprite();
+		updateSprite();
 	}
 
 	/// Determines the color of the card based on the element type. 
 	/// 
 	/// If the Element is null, it will assign the back-side Sprite as if the card has been turned face-down.
 	/// This method relys on the isFaceUp boolean instance variable being defined (it should not be null).
-	void _updateSprite() {
+	void updateSprite() {
 		if (isFaceUp) {
 			switch (type) {
 				case Element.fire:
@@ -283,7 +283,7 @@ class Card {
 			// flip card if either width or height are zero
 			if  (shape.width == 0 || shape.height == 0) {
 				_toggleFaceUp();
-				_updateSprite();
+				updateSprite();
 
 				// return card to original form factor
 				if (shape.width == 0) {

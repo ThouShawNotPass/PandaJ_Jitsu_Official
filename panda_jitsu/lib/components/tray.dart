@@ -134,7 +134,7 @@ class Tray {
 	/// Note: This method assumes comPot is not null.
 	bool flipHasFinished() {
 		return comPot.isDoneResizing();
-	}flutter
+	}
 
 	/// Compares the cards in the pot.
 	void compareCards() {

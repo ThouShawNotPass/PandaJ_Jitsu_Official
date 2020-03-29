@@ -80,6 +80,13 @@ flutter:
    - assets/images/cards/overlay/red-card.png
    - assets/images/cards/overlay/yellow-card.png
 
+   - assets/images/tokens/blue-token.png
+   - assets/images/tokens/green-token.png
+   - assets/images/tokens/orange-token.png
+   - assets/images/tokens/purple-token.png
+   - assets/images/tokens/red-token.png
+   - assets/images/tokens/yellow-token.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

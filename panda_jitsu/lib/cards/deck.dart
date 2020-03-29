@@ -110,6 +110,10 @@ class Deck {
 		c.setTargetSize(cardSize);
 		c.setShape(c.targetLocation, c.targetSize);
 		c.setCardStatus(CardStatus.inDeck);
+		if (!isMine) {
+			c.isFaceUp = false;
+			c.updateSprite(); // update the card itself
+		}
 		cards.add(c);
 	}
 }
