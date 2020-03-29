@@ -166,8 +166,22 @@ class Card {
 
 	/// Returns whether the card is done translating.
 	bool isDoneMoving() {
-		Offset dist = Offset(targetLocation.x - shape.left, targetLocation.y - shape.top);
+		Offset dist = Offset(
+			targetLocation.x - shape.left, 
+			targetLocation.y - shape.top
+		);
 		return dist.distanceSquared < minDistSquared; // Solves almost-zero bug
+	}
+
+	/// Compares self to other Card object.
+	/// 
+	/// Returns positive integer if this card beats the other, negative integer if not, and 0 if the two cards are tied.
+	int compareTo(Card other) {
+		return 0;
+		//this.type.index;
+		// 			fire0 > snow1 > water2
+		// water0 > fire1 > snow2 > water3
+		// you - me = +/-1
 	}
 
 	/// Toggles the value of isFaceUp

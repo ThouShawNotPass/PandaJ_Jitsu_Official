@@ -120,6 +120,16 @@ class JitsuGame extends Game {
 	/// Returns whether the player should be on the left.
 	bool isPlayerOnLeft() => playerOnLeft;
 
+	/// Returns 1 if the player won, -1 if opponent won, and 0 if they tie.
+	int compare(Card my, Card their) {
+		// if (my.type > their.type) {
+
+		// } else {
+
+		// }
+		return 0;
+	}
+
 	/// Calculates the size of the current screen and updates instance variable. 
 	/// 
 	/// This method is typically only called when the screen size changes, such as when the device is rotated by the user.
@@ -138,6 +148,9 @@ class JitsuGame extends Game {
 	/// Updates the state of the components.
 	void update(double timeDelta) {
 		tray.update(timeDelta);
+		if (tray.bothCardsReady()) {
+			
+		}
 	}
 
 	/// Handles an onTapDown event.

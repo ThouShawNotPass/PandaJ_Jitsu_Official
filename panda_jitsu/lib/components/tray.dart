@@ -122,7 +122,7 @@ class Tray {
 		return slot != null && slot.isNotEmpty;
 	}
 
-	// Returns whether both player's cards are in the middle 'pot'
+	/// Returns whether both player's cards are in the middle 'pot'.
 	bool bothCardsReady() {
 		bool myCardReady = myPot != null && myPot.isDoneMoving();
 		bool comCardReady = comPot != null && comPot.isDoneMoving();
@@ -152,7 +152,6 @@ class Tray {
 		} else {
 			_renderNames(c, right, left, comName, myName);
 		}
-		
 	}
 
 	/// Renders the given list of cards and given pot card to the canvas.
