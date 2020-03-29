@@ -177,11 +177,12 @@ class Card {
 	/// 
 	/// Returns positive integer if this card beats the other, negative integer if not, and 0 if the two cards are tied.
 	int compareTo(Card other) {
-		return 0;
-		//this.type.index;
-		// 			fire0 > snow1 > water2
-		// water0 > fire1 > snow2 > water3
-		// you - me = +/-1
+		int result = this.type.compareTo(other.type);
+		if (result == 0) {
+			return this.level - other.level;
+		} else {
+			return result;
+		}
 	}
 
 	/// Toggles the value of isFaceUp

@@ -101,9 +101,15 @@ class Deck {
 
 	/// Adds card to deck.
 	/// 
-	/// This will also set the CardStatus to CardStatus.inDeck.
-	void add(Card newCard) {
-		newCard.setCardStatus(CardStatus.inDeck);
-		cards.add(newCard);
+	/// This will also set the CardStatus to CardStatus.inDeck and reset the size of the card.
+	void add(Card c) {
+		c.setTargetLocation(Position( 
+			(screenCenter.x) - (cardSize.width / 2), // centered
+			(game.screenSize.height) // off the bottom of the screen
+		));
+		c.setTargetSize(cardSize);
+		c.setShape(c.targetLocation, c.targetSize);
+		c.setCardStatus(CardStatus.inDeck);
+		cards.add(c);
 	}
 }

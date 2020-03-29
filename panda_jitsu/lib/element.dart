@@ -30,15 +30,17 @@ enum Element {
   water // 2
 }
 
-extension on Element {
+extension Comparable on Element {
 
 	/// Compares self to another Element.
 	/// 
 	/// Returns a positive integer if this element beats the other element, a negative integer if the other element beats this element, and zero if the two elements tie.
 	int compareTo(Element other) {
 		int difference = other.index - this.index;
+		// Fixes wrap-around bug (fire <=> water)
 		if (difference.abs() > 1) {
-			difference *= -1;
+			difference *= -1; // flip places
+			difference ~/= 2; // truncating division
 		}
 		return difference;
 	}

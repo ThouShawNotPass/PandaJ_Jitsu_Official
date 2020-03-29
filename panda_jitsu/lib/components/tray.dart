@@ -129,6 +129,28 @@ class Tray {
 		return myCardReady && comCardReady;
 	}
 
+	/// Compares the cards in the pot.
+	void compareCards() {
+		if (bothCardsReady()) {
+			int result = myPot.compareTo(comPot);
+			if (result > 0) {
+				// player won
+				print('player won');
+			} else if (result < 0) {
+				// player lost
+				print('player lost');
+			} else {
+				// tie
+				print('player tied');
+			}
+			myDeck.add(myPot);
+			myPot = null;
+			comDeck.add(comPot);
+			comPot = null;
+			hasBeenFlipped = false;
+		}
+	}
+
 	/// Renders the right name to each side
 	void _renderNames(Canvas c, Position right, Position left,
 					  String leftName, String rightName) {

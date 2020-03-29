@@ -148,9 +148,7 @@ class JitsuGame extends Game {
 	/// Updates the state of the components.
 	void update(double timeDelta) {
 		tray.update(timeDelta);
-		if (tray.bothCardsReady()) {
-			
-		}
+		tray.compareCards();
 	}
 
 	/// Handles an onTapDown event.
