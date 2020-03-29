@@ -218,13 +218,13 @@ class Card {
 		style.renderRect(c, shape);
 		if (isFaceUp) {
 			overlay.renderRect(c, shape);
-			lvlSprite.renderRect(c, Rect.fromLTWH(
+			lvlSprite.renderRect(c, Rect.fromLTWH( // top left
 				shape.left, 
 				shape.top, 
 				shape.width * shrinkFactor, 
 				shape.width * shrinkFactor
 			));
-			lvlSprite.renderRect(c, Rect.fromLTRB(
+			lvlSprite.renderRect(c, Rect.fromLTRB( // bottom right
 				shape.right - shape.width * shrinkFactor, 
 				shape.bottom - shape.width * shrinkFactor, 
 				shape.right, 

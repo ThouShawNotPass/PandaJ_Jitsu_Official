@@ -134,25 +134,31 @@ class Tray {
 	/// Note: This method assumes comPot is not null.
 	bool flipHasFinished() {
 		return comPot.isDoneResizing();
-	}
+	}flutter
 
 	/// Compares the cards in the pot.
 	void compareCards() {
 		if (bothCardsReady() && flipHasFinished()) {
+			sleep(const Duration(seconds: 1));
 			int result = myPot.compareTo(comPot);
+			int myCardPause = 0;
+			int comCardPause = 0;
 			if (result > 0) {
 				// player won
 				print('player won');
+				myCardPause = 1;
 			} else if (result < 0) {
 				// player lost
 				print('player lost');
+				comCardPause = 1;
 			} else {
 				// tie
 				print('player tied');
 			}
-			sleep(const Duration(seconds:1));
+			sleep(Duration(seconds: myCardPause));
 			myDeck.add(myPot);
 			myPot = null;
+			sleep(Duration(seconds: comCardPause));
 			comDeck.add(comPot);
 			comPot = null;
 			hasBeenFlipped = false;
