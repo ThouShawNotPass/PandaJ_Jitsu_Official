@@ -1,6 +1,7 @@
 # TODO's
 
 # Critical
+- Make flip centered vertically
 
 
 # Features
