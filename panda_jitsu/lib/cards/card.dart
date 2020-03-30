@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:panda_jitsu/cards/deck.dart';
 import 'package:panda_jitsu/card_status.dart';
 import 'package:panda_jitsu/element.dart';
+import 'package:panda_jitsu/card_color.dart';
 import 'package:panda_jitsu/jitsu_game.dart';
 
 
@@ -46,6 +47,8 @@ class Card {
 
 	/// The image and styling of the card.
 	Sprite style = Sprite('cards/base/back-side.png');
+
+	CardColor overlayColor = CardColor.blue;
 
 	/// The card's overlay sprite.
 	Sprite overlay = Sprite('cards/overlay/blue-card.png');

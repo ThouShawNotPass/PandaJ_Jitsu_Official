@@ -71,7 +71,15 @@ void main() async {
 		'cards/overlay/orange-card.png',
 		'cards/overlay/purple-card.png',
 		'cards/overlay/red-card.png',
-		'cards/overlay/yellow-card.png'
+		'cards/overlay/yellow-card.png',
+		
+		// TOKENS
+		'tokens/blue-token.png',
+		'tokens/green-token.png',
+		'tokens/orange-token.png',
+		'tokens/purple-token.png',
+		'tokens/red-token.png',
+		'tokens/yellow-token.png',
 	]);
 
 	// Create a new instance of the game object
