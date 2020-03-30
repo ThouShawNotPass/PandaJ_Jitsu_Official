@@ -123,29 +123,9 @@ class Card {
 	/// 
 	/// The default color is yellow.
 	void _setRandomOverlay() {
-		switch (game.rand.nextInt(6)) {
-			case 0:
-				overlay = Sprite('cards/overlay/yellow-card.png');
-				break;
-			case 1:
-				overlay = Sprite('cards/overlay/orange-card.png');
-				break;
-			case 2:
-				overlay = Sprite('cards/overlay/green-card.png');
-				break;
-			case 3:
-				overlay = Sprite('cards/overlay/blue-card.png');
-				break;
-			case 4:
-				overlay = Sprite('cards/overlay/red-card.png');
-				break;
-			case 5:
-				overlay = Sprite('cards/overlay/purple-card.png');
-				break;
-			default:
-				overlay = Sprite('cards/overlay/yellow-card.png');
-				break;
-		}
+		int i = game.rand.nextInt(6);
+		overlayColor = CardColor.values[i];
+		overlay = Sprite('cards/overlay/' + overlayColor.name() + '-card.png');
 	}
 
 	/// Sets the current card level.
