@@ -1,15 +1,19 @@
 # TODO's
 
-# Critical
+## Critical
 - Make flip centered vertically
 
 
-# Features
+## Features
 - Award winner
 - Watch for gameOver()
 - Display winner and playAgain.
 
 - Start Animations.
 
+## Readability
+- Put all static const variables into the main Jitsu_Game file.
+- Make things private that should be.
+
 # Timelog
-~ 70 hours (as of Sat Mar 28)
+~ 80 hours (as of Sat Mar 29)

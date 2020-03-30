@@ -44,4 +44,9 @@ extension Comparable on Element {
 		}
 		return difference;
 	}
+
+	/// The name of the element (without the 'Element.' prefix).
+	String name() {
+		return this.toString().split('.').last;
+	}
 }
